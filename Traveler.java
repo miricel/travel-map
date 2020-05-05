@@ -1,6 +1,10 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
+import javax.swing.ImageIcon;
+
 import com.mysql.jdbc.PreparedStatement;
 
 public class Traveler extends User {
@@ -9,6 +13,25 @@ public class Traveler extends User {
 		super(con, id);
 	}
 	
+	public void uploadPic(String path) throws FileNotFoundException, SQLException {
+		super.uploadPic("Travelers", path);
+	}
+	
+	public ImageIcon getProfilePicture() throws SQLException, IOException {
+		return super.getProfilePicture("Travelers");
+	}
+	
+	public void setStringColumn(String column, String newData) throws SQLException {
+		super.setStringColumn("Travelers", column, newData);
+	}
+	
+	public int getIntColumn(String column) throws SQLException {
+		return super.getIntColumn("Travelers", column);
+	}
+	
+	public String getStringColumn(String column) throws SQLException {
+		return super.getStringColumn("Travelers", column);
+	}
 	
 	public void showTickets(int travelerID, String s) {
 		
@@ -24,36 +47,6 @@ public class Traveler extends User {
 	    preparedStm.execute();
 	    preparedStm.close();
 	        
-	}
-	
-	public void updateDepartureCity(String pass, String newDepartureCity) throws SQLException {
-		
-		Statement mystate = con.createStatement();
-		String query="UPDATE Travelers SET departureCity ="+newDepartureCity+"WHERE (id,password)=("+id+","+pass+")";
-		ResultSet myRS = mystate.executeQuery(query);
-		myRS.close();
-		mystate.close();
-	}
-	
-	public ResultSet getReviews() throws SQLException {
-		
-		Statement mystate = con.createStatement();
-		String query = "SELECT Travelers.name, Travelers.surname, Reviews.comment FROM Reviews, Travelers";
-		query = query + "WHERE Reviews.travelerID = Travelers.id";
-		ResultSet myRS = mystate.executeQuery(query);
-	
-		return myRS;
-	}
-
-	public ResultSet getUserData() throws SQLException {
-		
-		Statement mystate = con.createStatement();
-		String query = "SELECT * FROM Travelers";
-		query = query + "WHERE  id="+id;
-		ResultSet myRS = mystate.executeQuery(query);
-		
-		return myRS;
-		
 	}
 
 }
