@@ -12,17 +12,8 @@ public class ServerMain {
                 System.out.println("About to accept client connection...");
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Accepted connection from "+clientSocket);
-                Thread t = new Thread(){
-                    @Override
-                    public void run() {
-                        try {
-                            handleClientSocket(clientSocket);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-                t.start();
+                ServerWorker serverWorker = new ServerWorker(clientSocket);
+                serverWorker.start();
             }
         }catch(IOException e){
             e.printStackTrace();
@@ -30,10 +21,5 @@ public class ServerMain {
         }
     }
 
-    private static void handleClientSocket(Socket clientSocket) throws IOException {
-        OutputStream outputStream = clientSocket.getOutputStream();
 
-        outputStream.write("Hello world!\n".getBytes());
-        clientSocket.close();
-    }
 }
