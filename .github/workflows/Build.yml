@@ -41,11 +41,11 @@ jobs:
 
       # Builds and installs the artifact
       - name: Build and Install
-        run: mvn clean install
+        run: mvn -f "./travel-map/pom.xml" clean install
 
       # Uploads the Artifact to Github. You will be able to find it on your action workflow run
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
           name: final-artifact
-          path: target
+          path: "./travel-map/target"
