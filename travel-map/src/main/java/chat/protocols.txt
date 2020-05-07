@@ -1,0 +1,25 @@
+User & Server
+
+1. User -> Server
+    * login / logoff
+    * status
+2. Sever -> User
+    * online / offline
+3. User -> User
+    * direct messages
+    * broadcast messages #group
+
+Commands
+    - login <username> <password>
+    - logoff
+
+    - msg <username> <text>
+    ex:*
+       * sent: miri: "msg mada Hei Salut!"
+       * recived: mada: "msg miri Hei Salut!"
+
+    #group
+    - join #group
+    - leave #group
+    - sent: msg #group <text>
+      recived: msg #group:<username> <text>
