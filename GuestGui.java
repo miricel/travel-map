@@ -1,9 +1,11 @@
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 import javax.swing.JFrame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -15,20 +17,19 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-public class ClientGui {
+public class GuestGui {
 
 	private JFrame frame;
-	private Client client;
+	private Guest client;
 
-	public ClientGui(Connection con) throws SQLException {		
-		client = new Client(con);
+	public GuestGui(Connection con) throws SQLException {		
+		client = new Guest(con);
 		logInWindow();	
 	}
 	
 	private Image resizedImage(int w, int h, ImageIcon image) {
 		Image ri = image.getImage();
 		Image modified = ri.getScaledInstance(w, h, Image.SCALE_SMOOTH);
-		
 		return modified;
 	}
 	
@@ -37,7 +38,6 @@ public class ClientGui {
 	}
 	
 	private void logInWindow() {
-		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -64,13 +64,10 @@ public class ClientGui {
 		textUsername.setOpaque(false);
 		frame.getContentPane().add(textUsername);
 		
-		
 		JTextPane textPassword = new JTextPane();
 		textPassword.setBounds(83, 115, 304, 28);
 		textPassword.setOpaque(false);
 		frame.getContentPane().add(textPassword);
-	
-		
 		
 		JLabel lblUsername = new JLabel("Username");
 		lblUsername.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
@@ -83,7 +80,6 @@ public class ClientGui {
 		lblPassword.setForeground(Color.WHITE);
 		lblPassword.setBounds(90, 98, 70, 15);
 		frame.getContentPane().add(lblPassword);
-		
 	
 		JButton btnLogInWindow = new JButton("LOG IN");
 		btnLogInWindow.setForeground(Color.WHITE);
@@ -93,7 +89,6 @@ public class ClientGui {
 		btnLogInWindow.setFont(new Font("Liberation Sans", Font.BOLD, 12));
 		btnLogInWindow.setBounds(80, 12, 91, 25);
 		frame.getContentPane().add(btnLogInWindow);
-		
 		
 		JButton btnRegisterWindow = new JButton("REGISTER");
 		btnRegisterWindow.setFont(new Font("Liberation Sans", Font.BOLD, 12));
@@ -108,7 +103,6 @@ public class ClientGui {
 				registerUserWindow();
 			}
 		});
-		
 		
 		JLabel lblImRegisteringAs = new JLabel("I'm logging in as:");
 		lblImRegisteringAs.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
@@ -176,7 +170,6 @@ public class ClientGui {
 			}
 		});
 		
-		
 		JLabel lblBackground = new JLabel();
 		lblBackground.setBorder(null);
 		
@@ -187,11 +180,9 @@ public class ClientGui {
 		lblBackground.setIcon(i);
 		lblBackground.setBounds(0, -48, 453, 336);
 		frame.getContentPane().add(lblBackground);
-	
 	}
 	
-	private void registerUserWindow() {
-		
+	private void registerUserWindow() {	
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -217,7 +208,6 @@ public class ClientGui {
 		textUsername.setBounds(83, 61, 304, 28);
 		textUsername.setOpaque(false);
 		frame.getContentPane().add(textUsername);
-		
 		
 		JTextPane textPassword = new JTextPane();
 		textPassword.setBounds(83, 115, 304, 28);
@@ -321,8 +311,7 @@ public class ClientGui {
 						registerUserWindow();
 						e1.getMessage();
 					} 
-				}
-			
+				}	
 		});
 		
 		JLabel lblBackground = new JLabel();
@@ -334,16 +323,13 @@ public class ClientGui {
 		
 		lblBackground.setIcon(i);
 		lblBackground.setBounds(0, -48, 453, 336);
-		frame.getContentPane().add(lblBackground);
-		
+		frame.getContentPane().add(lblBackground);	
 	}
 	
-	private void registerAgencyWindow() {
-		
+	private void registerAgencyWindow() {	
 	}
 	
-	private void registerTravelerWindow(int tempID) {
-		
+	private void registerTravelerWindow(int tempID) {	
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -433,7 +419,6 @@ public class ClientGui {
 		lblDefaultDepartureCity.setBounds(93, 150, 171, 15);
 		frame.getContentPane().add(lblDefaultDepartureCity);
 		
-		
 		JButton btnRegisterTraveler = new JButton("REGISTER");
 		btnRegisterTraveler.setBorder(null);
 		btnRegisterTraveler.setBackground(new Color(204, 51, 102));
@@ -450,9 +435,11 @@ public class ClientGui {
 						logInWindow();
 					} catch (SQLException e1) {
 						e1.getMessage();
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					} 
-				}
-			
+				}		
 		});
 		
 		JLabel lblBackground = new JLabel();
@@ -465,7 +452,6 @@ public class ClientGui {
 		lblBackground.setIcon(i);
 		lblBackground.setBounds(0, -48, 453, 336);
 		frame.getContentPane().add(lblBackground);
-
 	}
 	
 }

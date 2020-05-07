@@ -12,7 +12,7 @@ public class Main {
 					
 					String url = "jdbc:mysql://localhost:3306/BookingApp";
 					Connection con = (Connection) DriverManager.getConnection(url, "denisa", "denisa");
-					ClientGui window = new ClientGui(con);
+					GuestGui window = new GuestGui(con);
 					
 				} catch (Exception e) {
 					e.printStackTrace();
