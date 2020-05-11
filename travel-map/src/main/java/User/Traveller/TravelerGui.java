@@ -1,4 +1,4 @@
-package Traveller;import java.awt.Color;
+package User.Traveller;import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -248,6 +248,7 @@ public class TravelerGui {
             e.printStackTrace();
         }
 
+
         JLabel lblCover = new JLabel("");
         lblCover.setBounds(0, 24, 450, 152);
         frame.getContentPane().add(lblCover);
@@ -315,6 +316,7 @@ public class TravelerGui {
         final JLabel label = new JLabel();
         label.setBorder(new LineBorder(new Color(0, 0, 0), 2));
         label.setBounds(34, 48, 93, 94);
+
         try {
             ImageIcon image = traveler.getProfilePicture();
             image = resizedImage(label.getWidth(), label.getHeight(), image);

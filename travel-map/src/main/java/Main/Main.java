@@ -2,7 +2,7 @@ package Main;
 import java.awt.EventQueue;
 import java.sql.DriverManager;
 
-import Guest.GuestGui;
+import User.Guest.GuestGui;
 import com.mysql.jdbc.Connection;
 
 public class Main {
@@ -17,10 +17,18 @@ public class Main {
                     Connection con = (Connection) DriverManager.getConnection(url, "root", "TravelMap");
                     GuestGui window = new GuestGui(con);
 
+
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
-    }
+
+
+
+        /*DBConnect db = new DBConnect();
+        db.Execute("Select * from travelers");
+    */}
 }

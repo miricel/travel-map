@@ -1,4 +1,4 @@
-package Guest;
+package User.Guest;
 
 
 import java.awt.Color;
@@ -14,7 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextPane;
 
-import Traveller.TravelerGui;
+import User.Traveller.TravelerGui;
 import com.mysql.jdbc.Connection;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -162,7 +162,7 @@ public class GuestGui {
 
                     }
                     else {
-                        int tempID = client.login("Agency", textUsername.getText(), textPassword.getText());
+                        int tempID = client.login("User/Agency", textUsername.getText(), textPassword.getText());
                         frame.setVisible(false);
                         //AgencyGui agencyGui = new AgencyGui(client.getConnection(), tempID);
                     }

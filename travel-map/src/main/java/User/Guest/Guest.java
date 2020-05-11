@@ -1,4 +1,7 @@
-package Guest;import java.io.FileInputStream;
+package User.Guest;
+
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.ResultSet;
@@ -31,8 +34,10 @@ public class Guest {
     }
 
     public void registerTraveler(int id,String name, String surname, String departureCity) throws SQLException, FileNotFoundException {
-        InputStream in = new FileInputStream("\\traveler.jpg");
-        String query="UPDATE Travelers SET name=?,surname=?,departureCity=?,profilePic=? WHERE id=?";
+        File file = new File("resources/traveler.jpg");
+        System.out.println(new File(".").getAbsolutePath());
+        InputStream in = new FileInputStream(file);
+        String query="UPDATE Travelers SET name=?,surname=?,departureCity=?,rofilePic=? WHERE id=?";
         PreparedStatement preparedStm = (PreparedStatement) con.prepareStatement(query);
         preparedStm.setString(1, name);
         preparedStm.setString(2, surname);
