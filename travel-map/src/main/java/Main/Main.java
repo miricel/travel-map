@@ -25,10 +25,5 @@ public class Main {
                 }
             }
         });
-
-
-
-        /*DBConnect db = new DBConnect();
-        db.Execute("Select * from travelers");
-    */}
+    }
 }
