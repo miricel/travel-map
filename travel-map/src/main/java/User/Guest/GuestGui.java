@@ -1,4 +1,4 @@
-package ptMiri;
+package User.Guest;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -14,6 +14,9 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextPane;
+
+import User.Traveller.TravelerGui;
+import User.Utility;
 import com.mysql.jdbc.Connection;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -63,12 +66,12 @@ public class GuestGui {
 		passPanel.setBackground(color);
 		frame.getContentPane().add(passPanel);
 		
-		JTextPane textUsername = new JTextPane();
+		final JTextPane textUsername = new JTextPane();
 		textUsername.setBounds(83, 61, 304, 28);
 		textUsername.setOpaque(false);
 		frame.getContentPane().add(textUsername);
 		
-		JPasswordField textPassword = new JPasswordField();
+		final JPasswordField textPassword = new JPasswordField();
 		textPassword.setBorder(null);
 		textPassword.setBounds(83, 115, 304, 28);
 		textPassword.setOpaque(false);
@@ -123,11 +126,11 @@ public class GuestGui {
 		frame.getContentPane().add(agency);
 		agency.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				agency.setSelected(true);
+				//agency.setSelected(true);
 			}
 		});
 		
-		JRadioButton traveler = new JRadioButton("TRAVELER");
+		final JRadioButton traveler = new JRadioButton("TRAVELER");
 		traveler.setFont(new Font("Liberation Sans", Font.BOLD, 12));
 		traveler.setContentAreaFilled(false);
 		traveler.setForeground(new Color(255, 255, 255));
@@ -154,7 +157,7 @@ public class GuestGui {
 			public void actionPerformed(ActionEvent e) {
 				
 				try {
-						
+
 					    if(traveler.isSelected()) {
 					    	
 					    	    int tempID = guest.login("Travelers", textUsername.getText(), Utility.hashPassword(textPassword.getText()));
@@ -215,12 +218,12 @@ public class GuestGui {
 		passPanel.setBackground(color);
 		frame.getContentPane().add(passPanel);
 		
-		JTextPane textUsername = new JTextPane();
+		final JTextPane textUsername = new JTextPane();
 		textUsername.setBounds(83, 61, 304, 28);
 		textUsername.setOpaque(false);
 		frame.getContentPane().add(textUsername);
 		
-		JPasswordField textPassword = new JPasswordField();
+		final JPasswordField textPassword = new JPasswordField();
 		textPassword.setBounds(83, 115, 304, 28);
 		textPassword.setOpaque(false);
 		textPassword.setBorder(null);
@@ -267,7 +270,7 @@ public class GuestGui {
 		lblImRegisteringAs.setBounds(93, 150, 171, 15);
 		frame.getContentPane().add(lblImRegisteringAs);
 		
-		JRadioButton agency = new JRadioButton("AGENCY");
+		final JRadioButton agency = new JRadioButton("AGENCY");
 		agency.setForeground(new Color(255, 255, 255));
 		agency.setFont(new Font("Liberation Sans", Font.BOLD, 12));
 		agency.setBounds(138, 165, 85, 23);
@@ -279,7 +282,7 @@ public class GuestGui {
 			}
 		});
 		
-		JRadioButton traveler = new JRadioButton("TRAVELER");
+		final JRadioButton traveler = new JRadioButton("TRAVELER");
 		traveler.setFont(new Font("Liberation Sans", Font.BOLD, 12));
 		traveler.setContentAreaFilled(false);
 		traveler.setForeground(new Color(255, 255, 255));
@@ -345,7 +348,7 @@ public class GuestGui {
 	private void registerAgencyWindow() {	
 	}
 	
-	private void registerTravelerWindow(int tempID) {	
+	private void registerTravelerWindow(final int tempID) {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -373,17 +376,17 @@ public class GuestGui {
 		defDepartureCityPanel.setBackground(color);
 		frame.getContentPane().add(defDepartureCityPanel);
 		
-		JTextPane textName = new JTextPane();
+		final JTextPane textName = new JTextPane();
 		textName.setBounds(83, 61, 304, 28);
 		textName.setOpaque(false);
 		frame.getContentPane().add(textName);
 		
-		JTextPane textSurname = new JTextPane();
+		final JTextPane textSurname = new JTextPane();
 		textSurname.setBounds(83, 115, 304, 28);
 		textSurname.setOpaque(false);
 		frame.getContentPane().add(textSurname);
 		
-		JTextPane textDefaultDepartureCity = new JTextPane();
+		final JTextPane textDefaultDepartureCity = new JTextPane();
 		textDefaultDepartureCity.setBounds(83, 168, 304, 28);
 		textDefaultDepartureCity.setOpaque(false);
 		frame.getContentPane().add(textDefaultDepartureCity);

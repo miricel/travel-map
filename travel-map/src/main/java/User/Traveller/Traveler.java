@@ -1,11 +1,12 @@
-package User.Traveller;import java.io.FileNotFoundException;
+package User.Traveller;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 
-import User.User;
 import com.mysql.jdbc.PreparedStatement;
+import User.User;
 
 public class Traveler extends User {
 

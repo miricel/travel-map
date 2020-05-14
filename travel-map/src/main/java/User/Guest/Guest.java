@@ -1,4 +1,4 @@
-package ptMiri;
+package User.Guest;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,18 +21,21 @@ public class Guest {
 		return this.con;
 	}
 
-	public int registerUser(String tableType, String username, String pass) throws SQLException {	
+	public int registerUser(String tableType, String username, String pass) throws SQLException {
 		String query="INSERT INTO "+tableType+" (username, password) VALUES (?, ?)";
+		System.out.println(query);
 		PreparedStatement preparedStm = (PreparedStatement) con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 		preparedStm.setString(1, username);
 		preparedStm.setString(2, pass);
-	    preparedStm.executeUpdate();    
+	    preparedStm.executeUpdate();
+		System.out.println("!!!!!!!!!");
 	    ResultSet rs = preparedStm.getGeneratedKeys();
 	    return rs.next() ? rs.getInt(1) : (-1);
 	}
 	
     public void registerTraveler(int id,String name, String surname, String departureCity) throws SQLException, FileNotFoundException {
-    	InputStream in = new FileInputStream("src/traveler.jpg");
+
+		InputStream in = new FileInputStream("resources/traveler.jpg");
 		String query="UPDATE Travelers SET name=?,surname=?,departureCity=?,profilePic=? WHERE id=?";
 		PreparedStatement preparedStm = (PreparedStatement) con.prepareStatement(query);
 		preparedStm.setString(1, name);
@@ -44,10 +47,14 @@ public class Guest {
 	    preparedStm.close();
 	}
 	
-	public int login(String tableType, String username, String pass) throws SQLException {	
+	public int login(String tableType, String username, String pass) throws SQLException {
+
 		Statement mystate = con.createStatement();
+		System.out.println("------------------");
 		String query = "SELECT id FROM "+tableType+" WHERE (username, password) = ('" +username+"','"+pass+"')";
+		System.out.println(query);
 		ResultSet myRS = mystate.executeQuery(query);
+		System.out.println("ELO");
 		if(myRS.next()) 
 			return  myRS.getInt("id");
 		else {

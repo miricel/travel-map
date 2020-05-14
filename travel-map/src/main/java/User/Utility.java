@@ -1,4 +1,4 @@
-package ptMiri;
+package User;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -13,6 +13,7 @@ public class Utility {
 		for(byte b1:b) {
 			sb.append(Integer.toHexString(b1 & 0xff).toString());
 		}
+		System.out.println(sb);
 		return sb.toString();
 	}
 }

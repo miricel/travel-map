@@ -1,4 +1,4 @@
-package ptMiri;
+package User.Traveller;
 
 import java.awt.Font;
 import java.awt.Image;

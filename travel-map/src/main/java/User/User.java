@@ -1,4 +1,4 @@
-package ptMiri;
+package User;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -15,7 +15,7 @@ import com.mysql.jdbc.Blob;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 
-abstract class User {
+public abstract class User {
 
 	protected int id;
 	protected Connection con;
