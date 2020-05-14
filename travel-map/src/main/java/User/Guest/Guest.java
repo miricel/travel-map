@@ -12,7 +12,6 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 
 public class Guest {
-
     private Connection con;
 
     public Guest(Connection con) throws SQLException {
@@ -35,9 +34,8 @@ public class Guest {
 
     public void registerTraveler(int id,String name, String surname, String departureCity) throws SQLException, FileNotFoundException {
         File file = new File("resources/traveler.jpg");
-        System.out.println(new File(".").getAbsolutePath());
         InputStream in = new FileInputStream(file);
-        String query="UPDATE Travelers SET name=?,surname=?,departureCity=?,rofilePic=? WHERE id=?";
+        String query="UPDATE Travelers SET name=?,surname=?,departureCity=?,profilePic=? WHERE id=?";
         PreparedStatement preparedStm = (PreparedStatement) con.prepareStatement(query);
         preparedStm.setString(1, name);
         preparedStm.setString(2, surname);
@@ -52,6 +50,7 @@ public class Guest {
         Statement mystate = con.createStatement();
         String query = "SELECT id FROM "+tableType+" WHERE (username, password) = ('" +username+"','"+pass+"')";
         ResultSet myRS = mystate.executeQuery(query);
+        //System.out.println(myRS.getInt("id"));
         return myRS.next() ? myRS.getInt("id") : (-1);
     }
 

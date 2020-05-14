@@ -1,8 +1,10 @@
 package chat.Client;
 
-public interface UserStatusListener {
-    public void online(String username);
-    public void offline(String username);
+import javax.swing.*;
+
+public interface UserStatusListener  {
+    public abstract void online(String username);
+    public abstract void offline(String username);
 
 
 }

@@ -17,9 +17,6 @@ public class Main {
                     Connection con = (Connection) DriverManager.getConnection(url, "root", "TravelMap");
                     GuestGui window = new GuestGui(con);
 
-
-
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

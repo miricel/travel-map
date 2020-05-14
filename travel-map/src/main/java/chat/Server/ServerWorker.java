@@ -2,23 +2,35 @@ package chat.Server;
 
 import java.io.*;
 import java.net.Socket;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.PreparedStatement;
 import org.apache.commons.lang3.StringUtils;
 
 public class ServerWorker extends Thread {
 
     private final Socket clientSocket;
     private final Server server;
+    private Lock lock = new ReentrantLock();
     private String loginUser = null;
+    private Integer userid = null;
     private PrintWriter output;
     private BufferedReader input;
     private HashSet<String> groups = new HashSet<>();
+    private Connection con;
 
-    public ServerWorker(Server server, Socket clientSocket) {
+    public ServerWorker(Server server, Socket clientSocket, Connection con) {
         this.server = server;
         this.clientSocket = clientSocket;
+        this.con = con;
     }
 
     public String getLoginUser() {
@@ -31,6 +43,8 @@ public class ServerWorker extends Thread {
            // trySimple();
             handleClientSocket();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -57,7 +71,7 @@ public class ServerWorker extends Thread {
     }
 
 
-    private void handleClientSocket() throws IOException {
+    private void handleClientSocket() throws IOException, SQLException {
         this.input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         this.output = new PrintWriter(clientSocket.getOutputStream(), true);
 
@@ -114,7 +128,7 @@ public class ServerWorker extends Thread {
         }
     }
 
-    private void handleMessage(String[] tokens) throws IOException {
+    private void handleMessage(String[] tokens) throws IOException, SQLException {
         String dest = tokens[1];
         String text = tokens[2];
 
@@ -129,6 +143,7 @@ public class ServerWorker extends Thread {
                 }
             }
             else if(dest.equals(worker.getLoginUser())){
+
                 String message = "msg "+ loginUser + " " + text;
                 worker.send(message);
             }
@@ -148,15 +163,31 @@ public class ServerWorker extends Thread {
         clientSocket.close();
     }
 
-    private void handleLogin(PrintWriter printOutput, String[] tokens) throws IOException {
+    private boolean loginOK(String username, String password) throws SQLException {
+
+        Statement mystate = con.createStatement();
+        String query = "SELECT id FROM travelers WHERE (username, password) = ('" +username+"','"+password+"')";
+        ResultSet myRS = mystate.executeQuery(query);
+        if( myRS.next()) {
+            this.userid = myRS.getInt("id");
+            return true;
+        } else throw new SQLException();
+    }
+
+    private void handleLogin(PrintWriter printOutput, String[] tokens) throws IOException, SQLException {
         if(tokens.length == 3){
             String username = tokens[1];
             String password = tokens[2];
-            if((username.equals("guest") && password.equals("password")) || (username.equals("jim") && password.equals("jim")) ){
+
+
+            if(loginOK(username,password)){
                 String msgSucces = "Login Succes";
                 printOutput.println(msgSucces);
                 loginUser = username;
+
+                lock.lock();
                 List<ServerWorker> workerList = server.getWorkerList();
+                lock.unlock();
 
                 //send current user state to all other online users
                 String msgOnline = "online " + loginUser;
@@ -166,12 +197,14 @@ public class ServerWorker extends Thread {
                 }
 
                 //send current user all other online users state
+                System.out.println();
                 for(ServerWorker worker: workerList){
                     if( worker.getLoginUser()!=null && !loginUser.equals(worker.getLoginUser()) ) {
                         String msgAlreadyOnline = "online " + worker.getLoginUser();
                         send(msgAlreadyOnline);
                     }
                 }
+
 
             }else {
                 String msgFail = "Login Fail";

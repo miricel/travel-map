@@ -13,6 +13,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import chat.Client.ConnectChatWindow;
 import com.mysql.jdbc.Connection;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
@@ -25,8 +27,10 @@ public class TravelerGui {
     private JFrame frame;
     private Traveler traveler;
     private int index;
+    private Connection con;
 
     public TravelerGui(Connection con, int id) {
+        this.con = con;
         traveler = new Traveler(con, id);
         homePageWindow();
     }
@@ -47,7 +51,7 @@ public class TravelerGui {
     private void myHeader() {
 
         index = 0;
-        Color color = new Color(0,0,0);
+        Color color = new Color(0, 0, 0);
         color = transparentColor(color, 200);
 
         JPanel myHeader = new JPanel();
@@ -68,7 +72,7 @@ public class TravelerGui {
         lblMenu.setBounds(38, 0, 51, 27);
         panelHeader.add(lblMenu);
 
-        JButton btnMenu =new JButton("||||");
+        JButton btnMenu = new JButton("||||");
         btnMenu.setBorderPainted(false);
         btnMenu.setBounds(-13, -2, 63, 27);
         panelHeader.add(btnMenu);
@@ -114,7 +118,8 @@ public class TravelerGui {
 
         JButton btnNewButton_2 = new JButton("My profile");
         btnNewButton_2.setContentAreaFilled(false);
-        btnNewButton_2.setBorderPainted(false);;
+        btnNewButton_2.setBorderPainted(false);
+        ;
         btnNewButton_2.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
         btnNewButton_2.setForeground(new Color(255, 255, 255));
         btnNewButton_2.setBounds(2, 27, 137, 27);
@@ -128,7 +133,8 @@ public class TravelerGui {
 
         JButton btnNewButton_3 = new JButton("My Tickets");
         btnNewButton_3.setContentAreaFilled(false);
-        btnNewButton_3.setBorderPainted(false);;
+        btnNewButton_3.setBorderPainted(false);
+        ;
         btnNewButton_3.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
         btnNewButton_3.setForeground(new Color(255, 250, 250));
         btnNewButton_3.setBounds(2, 54, 137, 27);
@@ -136,7 +142,8 @@ public class TravelerGui {
 
         JButton btnNewButton_4 = new JButton("Tickets");
         btnNewButton_4.setContentAreaFilled(false);
-        btnNewButton_4.setBorderPainted(false);;
+        btnNewButton_4.setBorderPainted(false);
+        ;
         btnNewButton_4.setForeground(new Color(255, 255, 255));
         btnNewButton_4.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
         btnNewButton_4.setBounds(2, 81, 137, 27);
@@ -144,7 +151,8 @@ public class TravelerGui {
 
         JButton btnNewButton_5 = new JButton("Reviews");
         btnNewButton_5.setContentAreaFilled(false);
-        btnNewButton_5.setBorderPainted(false);;
+        btnNewButton_5.setBorderPainted(false);
+        ;
         btnNewButton_5.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
         btnNewButton_5.setForeground(new Color(255, 255, 255));
         btnNewButton_5.setBounds(2, 108, 137, 27);
@@ -170,6 +178,16 @@ public class TravelerGui {
         btnNewButton_7.setContentAreaFilled(false);
         btnNewButton_7.setBorderPainted(false);
         btnNewButton_7.setBounds(2, 162, 137, 27);
+        btnNewButton_7.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                frame.setVisible(false);
+                try {
+                    chatWindow();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         panelMenu.add(btnNewButton_7);
 
         JButton btnNewButton_8 = new JButton("Log Out");
@@ -184,7 +202,7 @@ public class TravelerGui {
         btnMenu.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 index++;
-                if(index%2 == 0)
+                if (index % 2 == 0)
                     panelMenu.setVisible(false);
                 else panelMenu.setVisible(true);
             }
@@ -284,14 +302,14 @@ public class TravelerGui {
         ImageIcon set = new ImageIcon(this.getClass().getResource("/setting.png"));
         set = resizedImage(12, 12, set);
 
-        final JPanel []panel = new JPanel[5];
-        JTextPane []textPane = new JTextPane[5];
+        final JPanel[] panel = new JPanel[5];
+        JTextPane[] textPane = new JTextPane[5];
 		/*panel[0].setName("Username");
 		panel[1].setName("Password");
 		panel[2].setName("Name");
 		panel[3].setName("Surname");
 		panel[4].setName("Default departure city");*/
-        for(int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             panel[i] = new JPanel();
             panel[i].setBorder(new LineBorder(new Color(0, 0, 0)));
             panel[i].setBackground(new Color(245, 222, 179));
@@ -406,18 +424,18 @@ public class TravelerGui {
         lblMycity.setBounds(162, 280, 170, 15);
         frame.getContentPane().add(lblMycity);
 
-        final JButton []btn = new JButton[5];
-        final int []isPressed = new int[5];
-        for(int k = 0, j = 75; k < 5; k++, j = j + 50) {
+        final JButton[] btn = new JButton[5];
+        final int[] isPressed = new int[5];
+        for (int k = 0, j = 75; k < 5; k++, j = j + 50) {
             final int i = k;
-            btn[i]= new JButton();
+            btn[i] = new JButton();
             btn[i].setBounds(358, j, 60, 25);
             btn[i].setIcon(set);
             btn[i].setContentAreaFilled(false);
             btn[i].setBorder(null);
             btn[i].addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent arg0) {
-                    if(isPressed[i]%2 == 0) {
+                    if (isPressed[i] % 2 == 0) {
                         panel[i].setVisible(true);
                     }
 
@@ -435,8 +453,8 @@ public class TravelerGui {
         JButton btnNewButton = new JButton("Save Changes");
         btnNewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                for(int j = 0; j < 5; j++)
-                    if(isPressed[j]%2 != 0)
+                for (int j = 0; j < 5; j++)
+                    if (isPressed[j] % 2 != 0)
                         try {
                             traveler.setStringColumn(btn[j].getName(), "laal");
                         } catch (SQLException e1) {
@@ -452,6 +470,44 @@ public class TravelerGui {
         frame.getContentPane().add(btnNewButton);
 
 
+    }
 
+    private void chatWindow() throws SQLException {
+
+        frame = new JFrame();
+        frame.setBounds(100, 100, 450, 400);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setLayout(null);
+        frame.setVisible(true);
+
+        myHeader();
+        final String username = traveler.getStringColumn("travelers","username");
+        final String password = traveler.getStringColumn("travelers", "password");
+
+        JButton Message = new JButton("Message");
+        Message.setFont(new Font("Liberation Sans", Font.BOLD, 12));
+        Message.setBackground(SystemColor.desktop);
+        Message.setForeground(Color.WHITE );
+        Message.setBounds(149, 40, 138, 25);
+        frame.getContentPane().add(Message);
+        Message.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new ConnectChatWindow(username,password,con);
+            }
+        });
+
+        JButton someoneElse = new JButton("Not You?");
+        someoneElse.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ConnectChatWindow connectChatWindow = new ConnectChatWindow(con);
+
+            }
+        });
+
+        someoneElse.setBackground(SystemColor.desktop);
+        someoneElse.setForeground(new Color(255, 255, 255));
+        someoneElse.setFont(new Font("Liberation Sans", Font.BOLD, 13));
+        someoneElse.setBounds(149, 122, 138, 25);
+        frame.getContentPane().add(someoneElse);
     }
 }

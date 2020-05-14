@@ -1,10 +1,16 @@
 package chat.Client;
 
+import com.mysql.jdbc.PreparedStatement;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Client {
     private final int serverPort;
@@ -14,40 +20,18 @@ public class Client {
     private PrintWriter output;
     private ArrayList<UserStatusListener> userStatusListeners = new ArrayList<>();
     private ArrayList<MessageListener> messageListeners = new ArrayList<>();
-    private boolean running;
     private Thread thread;
+    private final AtomicBoolean running = new AtomicBoolean(false);
+    private String username;
+    private Connection con;
 
-    public Client(String serverName, int serverPort) {
+    public Client(String serverName, int serverPort, Connection con) {
         this.serverName = serverName;
         this.serverPort = serverPort;
+        this.con = con;
     }
 
-    public void trySimple() throws IOException, InterruptedException, ClassNotFoundException {
-        //get the localhost IP address, if server is running on some other IP, you need to use that
-        // InetAddress host = InetAddress.getLocalHost();
-        //establish socket connection to server
-        this.socket = new Socket("192.168.1.9", 8818);
-        //write to socket using ObjectOutputStream
-        this.input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        this.output = new PrintWriter(socket.getOutputStream(), true);
-        System.out.println("Sending request to Socket Server");
-         for(int i=0; i<5;i++) {
-            if (i == 4)output.println("exit");
-            else {
-               output.println("" + i);
-            }
-
-            String message;
-            if( (message = input.readLine()) != null)
-                System.out.println("Message: " + message);
-            else System.out.println("ceva nush");
-            Thread.sleep(500);
-        }
-        input.close();
-        output.close();
-    }
-
-    public void original(Client client) throws IOException {
+    public void original(Client client) throws IOException, SQLException {
         client.addUserStatusListener((new UserStatusListener() {
             @Override
             public void online(String username) {
@@ -78,18 +62,50 @@ public class Client {
         }
     }
 
-    public void msg(String dest, String text) {
+    public void msg(String dest, String text) throws SQLException {
         String cmd = "msg "+ dest + " " + text;
+        Statement mystate = con.createStatement();
+        int conv;
+        String query = "SELECT id FROM conversation WHERE ((user1 = '"+username+"' AND user2 = '"+dest+"') " +
+                "OR (user1 = '"+dest+"' AND user2 = '"+username+"'))";
+        ResultSet myRS = mystate.executeQuery(query);
+        if(myRS.next())
+            conv = myRS.getInt("id");
+        else
+        {
+            query = "INSERT INTO conversation (user1, user2) VALUES" + "(?, ?)";
+            PreparedStatement preparedStm = (PreparedStatement) con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            preparedStm.setString(1, username);
+            preparedStm.setString(2, dest);
+            preparedStm.executeUpdate();
+            ResultSet rs = preparedStm.getGeneratedKeys();
+            if(myRS.next())
+                conv = myRS.getInt("id");
+            else throw new SQLException();
+            preparedStm.close();
+        }
+
+        String sql = "INSERT INTO messages(`text`, `from`, `to`, `conversationID`) VALUES ( ?, ?, ?, ?)";
+
+        PreparedStatement preparedStm = (PreparedStatement) con.prepareStatement(sql);
+        preparedStm.setString(1, text);
+        preparedStm.setString(2, username);
+        preparedStm.setString(3, dest);
+        preparedStm.setInt(4, conv);
+        preparedStm.execute();
+        preparedStm.close();
+
         output.println(cmd);
     }
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-        Client client = new Client( "localhost", 8818);
-        client.running = true;
+  /*  public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+        Client client = new Client( "localhost", 8818,);
        // client.trySimple();
         client.original(client);
 
     }
+
+   */
 
     public boolean connect() {
         try {
@@ -113,6 +129,7 @@ public class Client {
         System.out.println("Response: "+response);
         if("Login Succes".equalsIgnoreCase(response) ) {
             startMessagReciver();
+            this.username = username;
             return true;
         }
         else return false;
@@ -122,6 +139,7 @@ public class Client {
         thread = new Thread(){
             @Override
             public void run() {
+                running.set(true);
                 readMessageLoop();
             }
         };
@@ -131,10 +149,11 @@ public class Client {
     private void readMessageLoop() {
         String line;
         try{
-            while ( ((line = input.readLine()) != null) ) {
+            while ( running.get() && ((line = input.readLine()) != null) ) {
                 String[] tokens = StringUtils.split(line);
                 if( tokens != null && tokens.length > 0 ) {
                     String cmd = tokens[0];
+                    System.out.println(line);
                     if ("online".equalsIgnoreCase(cmd)){
                         handleOnline(tokens);
                     }else if ("offline".equalsIgnoreCase(cmd))
@@ -170,6 +189,7 @@ public class Client {
     }
 
     private void handleOnline(String[] tokens) {
+        System.out.println("handleOnline: "+tokens[1]);
         String user = tokens[1];
         for(UserStatusListener listener: userStatusListeners){
            listener.online(user);
@@ -194,18 +214,21 @@ public class Client {
 
     public void disconnect(){
 
-        if(thread != null)
-            thread.interrupt();
+        running.set(false);
+        thread.interrupt();
         thread = null;
-        running = false;
         output.println("quit");
         try {
-            socket.close();
             input.close();
             output.close();
+
+            socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public String getUsername() {
+        return username;
+    }
 }
