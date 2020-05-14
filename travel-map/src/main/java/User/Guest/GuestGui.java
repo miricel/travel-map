@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextPane;
 
+import User.Agency.AgencyGui;
 import User.Traveller.TravelerGui;
 import User.Utility;
 import com.mysql.jdbc.Connection;
@@ -118,7 +119,7 @@ public class GuestGui {
 		lblImRegisteringAs.setBounds(93, 150, 171, 15);
 		frame.getContentPane().add(lblImRegisteringAs);
 		
-		JRadioButton agency = new JRadioButton("AGENCY");
+		final JRadioButton agency = new JRadioButton("AGENCY");
 		agency.setForeground(new Color(255, 255, 255));
 		agency.setFont(new Font("Liberation Sans", Font.BOLD, 12));
 		agency.setBounds(138, 165, 85, 23);
@@ -126,7 +127,7 @@ public class GuestGui {
 		frame.getContentPane().add(agency);
 		agency.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//agency.setSelected(true);
+				agency.setSelected(true);
 			}
 		});
 		
@@ -166,9 +167,9 @@ public class GuestGui {
 							
 						}
 						else {
-								int tempID = guest.login("Agency", textUsername.getText(),Utility.hashPassword(textPassword.getText()));
+								int tempID = guest.login("agencies", textUsername.getText(),Utility.hashPassword(textPassword.getText()));
 		                        frame.setVisible(false);
-								//AgencyGui agencyGui = new AgencyGui(client.getConnection(), tempID);
+								AgencyGui agencyGui = new AgencyGui(guest.getConnection(), tempID);
 						}
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(null, "Wrong input!");
@@ -318,7 +319,10 @@ public class GuestGui {
 							registerTravelerWindow(tempID);
 						}
 						else if(agency.isSelected()) {
-							
+							String s = Utility.hashPassword(textPassword.getText());
+							tempID = guest.registerUser("agencies", textUsername.getText() , s);
+							frame.setVisible(false);
+							registerAgencyWindow(tempID);
 						}
 						
 					} catch (SQLException e1) {
@@ -345,7 +349,128 @@ public class GuestGui {
 		frame.getContentPane().add(lblBackground);	
 	}
 	
-	private void registerAgencyWindow() {	
+	private void registerAgencyWindow(final int tempID) {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		frame.setVisible(true);
+
+		Color color = new Color(225, 225, 225);
+		color = transparentColor(color, 100);
+
+		JPanel namePanel = new JPanel();
+		namePanel.setName("Agency name");
+		namePanel.setBounds(83, 61, 304, 28);
+		namePanel.setBackground(color);
+		frame.getContentPane().add(namePanel);
+
+		JPanel countryPanel = new JPanel();
+		countryPanel.setName("Country");
+		countryPanel.setBounds(83, 115, 304, 28);
+		countryPanel.setBackground(color);
+		frame.getContentPane().add(countryPanel);
+
+		JPanel instaPanel = new JPanel();
+		instaPanel.setName("Instagram account");
+		instaPanel.setBounds(83, 168, 304, 28);
+		instaPanel.setBackground(color);
+		frame.getContentPane().add(instaPanel);
+
+		final JTextPane textName = new JTextPane();
+		textName.setBounds(83, 61, 304, 28);
+		textName.setOpaque(false);
+		frame.getContentPane().add(textName);
+
+		final JTextPane textCountry = new JTextPane();
+		textCountry.setBounds(83, 115, 304, 28);
+		textCountry.setOpaque(false);
+		frame.getContentPane().add(textCountry);
+
+		final JTextPane textInsta = new JTextPane();
+		textInsta.setBounds(83, 168, 304, 28);
+		textInsta.setOpaque(false);
+		frame.getContentPane().add(textInsta);
+
+		JLabel lblName = new JLabel("Agency name");
+		lblName.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
+		lblName.setForeground(Color.WHITE);
+		lblName.setBounds(90, 44, 91, 15);
+		frame.getContentPane().add(lblName);
+
+		JLabel lblCountry = new JLabel("Country");
+		lblCountry.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
+		lblCountry.setForeground(Color.WHITE);
+		lblCountry.setBounds(90, 98, 70, 15);
+		frame.getContentPane().add(lblCountry);
+
+		JButton btnLogInWindow = new JButton("LOG IN");
+		btnLogInWindow.setForeground(color);
+		btnLogInWindow.setOpaque(false);
+		btnLogInWindow.setContentAreaFilled(false);
+		btnLogInWindow.setBorderPainted(false);
+		btnLogInWindow.setFont(new Font("Liberation Sans", Font.BOLD, 12));
+		btnLogInWindow.setBounds(80, 12, 91, 25);
+		frame.getContentPane().add(btnLogInWindow);
+		btnLogInWindow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.setVisible(false);
+				logInWindow();
+			}
+		});
+
+		JButton btnRegisterWindow = new JButton("REGISTER");
+		btnRegisterWindow.setFont(new Font("Liberation Sans", Font.BOLD, 12));
+		btnRegisterWindow.setForeground(Color.WHITE);
+		btnRegisterWindow.setBounds(173, 12, 91, 21);
+		btnRegisterWindow.setContentAreaFilled(false);
+		btnRegisterWindow.setBorderPainted(false);
+		frame.getContentPane().add(btnRegisterWindow);
+		btnRegisterWindow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.setVisible(false);
+				registerUserWindow();
+			}
+		});
+
+		JLabel lblInsta = new JLabel("Instagram");
+		lblInsta.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
+		lblInsta.setForeground(new Color(255, 255, 255));
+		lblInsta.setBounds(93, 150, 171, 15);
+		frame.getContentPane().add(lblInsta);
+
+		JButton btnRegisterAgency = new JButton("REGISTER");
+		btnRegisterAgency.setBorder(null);
+		btnRegisterAgency.setBackground(new Color(204, 51, 102));
+		btnRegisterAgency.setForeground(new Color(255, 255, 255));
+		btnRegisterAgency.setFont(new Font("Liberation Sans", Font.BOLD, 12));
+		btnRegisterAgency.setBounds(173, 211, 117, 28);
+		frame.getContentPane().add(btnRegisterAgency);
+		btnRegisterAgency.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					guest.RegisterAgency(tempID, textName.getText(), textCountry.getText(), textInsta.getText());
+					JOptionPane.showMessageDialog(null, "You've been registered!");
+					frame.setVisible(false);
+					logInWindow();
+				} catch (SQLException e1) {
+					e1.getMessage();
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+
+		JLabel lblBackground = new JLabel();
+		lblBackground.setBorder(null);
+
+		ImageIcon i = new ImageIcon(this.getClass().getResource("/login.jpg"));
+		Image scaled = resizedImage(frame.getWidth(), frame.getHeight(), i);
+		i = new ImageIcon(scaled);
+
+		lblBackground.setIcon(i);
+		lblBackground.setBounds(0, -48, 453, 336);
+		frame.getContentPane().add(lblBackground);
 	}
 	
 	private void registerTravelerWindow(final int tempID) {

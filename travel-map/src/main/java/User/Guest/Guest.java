@@ -23,12 +23,10 @@ public class Guest {
 
 	public int registerUser(String tableType, String username, String pass) throws SQLException {
 		String query="INSERT INTO "+tableType+" (username, password) VALUES (?, ?)";
-		System.out.println(query);
 		PreparedStatement preparedStm = (PreparedStatement) con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 		preparedStm.setString(1, username);
 		preparedStm.setString(2, pass);
 	    preparedStm.executeUpdate();
-		System.out.println("!!!!!!!!!");
 	    ResultSet rs = preparedStm.getGeneratedKeys();
 	    return rs.next() ? rs.getInt(1) : (-1);
 	}
@@ -46,15 +44,26 @@ public class Guest {
 	    preparedStm.execute();
 	    preparedStm.close();
 	}
+
+	public void RegisterAgency(int id,String name, String country, String insta) throws SQLException, FileNotFoundException {
+
+		InputStream in = new FileInputStream("resources/agency.png");
+		String query="UPDATE agencies SET name=?,country=?,insta=?,profilePic=? WHERE id=?";
+		PreparedStatement preparedStm = (PreparedStatement) con.prepareStatement(query);
+		preparedStm.setString(1, name);
+		preparedStm.setString(2, country);
+		preparedStm.setString(3, insta);
+		preparedStm.setBlob(4, in);
+		preparedStm.setInt(5, id);
+		preparedStm.execute();
+		preparedStm.close();
+	}
 	
 	public int login(String tableType, String username, String pass) throws SQLException {
 
 		Statement mystate = con.createStatement();
-		System.out.println("------------------");
 		String query = "SELECT id FROM "+tableType+" WHERE (username, password) = ('" +username+"','"+pass+"')";
-		System.out.println(query);
 		ResultSet myRS = mystate.executeQuery(query);
-		System.out.println("ELO");
 		if(myRS.next()) 
 			return  myRS.getInt("id");
 		else {
