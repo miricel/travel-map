@@ -18,11 +18,21 @@ import com.mysql.jdbc.PreparedStatement;
 public abstract class User {
 
 	protected int id;
-	protected Connection con;
+	public Connection con;
 	
 	public User(java.sql.Connection con, int id) {
 		this.con = (Connection) con;
 		this.id = id;
+	}
+	
+	public boolean isCorrectPassword(String tableType, String password) throws SQLException {
+		Statement mystate = con.createStatement();
+		String query = "SELECT password FROM "+tableType;
+		query = query + " WHERE id="+id;
+		ResultSet myRS = mystate.executeQuery(query);
+		if(myRS.next() && myRS.getString(1).equals(password))
+			return true;
+		else throw new SQLException("Incorrect password");
 	}
 	
 	public int getID() {

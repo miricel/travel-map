@@ -1,9 +1,12 @@
 package chat.Client;
 
 import com.mysql.jdbc.PreparedStatement;
-import org.apache.commons.lang3.StringUtils;
+import com.mysql.jdbc.StringUtils;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -140,13 +143,13 @@ public class Client {
             @Override
             public void run() {
                 running.set(true);
-                readMessageLoop();
+                //readMessageLoop();
             }
         };
         thread.start();
     }
 
-    private void readMessageLoop() {
+  /*  private void readMessageLoop() {
         String line;
         try{
             while ( running.get() && ((line = input.readLine()) != null) ) {
@@ -170,7 +173,7 @@ public class Client {
         }
 
       //  disconnect();
-    }
+    } */
 
     private void handleMessage(String[] tokensMsg) {
         String from = tokensMsg[1];

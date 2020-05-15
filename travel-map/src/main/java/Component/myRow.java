@@ -1,12 +1,11 @@
 package Component;
 
-import javafx.scene.layout.Border;
-
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 public class myRow extends JPanel implements ListCellRenderer{
 
