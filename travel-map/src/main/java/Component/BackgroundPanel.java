@@ -1,29 +1,219 @@
 package Component;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import User.Agency.AgencyGui;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class BackgroundPanel extends JPanel {
+    private final int width;
+    private final int height;
     private BufferedImage background;
 
-    public BackgroundPanel(String image)
-    {
+    public BackgroundPanel(String image, int width, int height) {
+
+        this.width = width;
+        this.height = height;
         try {
             background = ImageIO.read(new File(image));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+
     }
+
+    public BackgroundPanel(BufferedImage backgroundimg, int width, int height) {
+        this.width = width;
+        this.height = height;
+        this.background = backgroundimg;
+    }
+
+    public void myHeader(String username, final AgencyGui agencyGui) {
+
+        JPanel panel = new JPanel();
+        panel.setBounds(0, 0, width, height);
+        panel.setOpaque(false);
+        panel.setLayout(null);
+        final int[] index = {0};
+        Color color = new Color(0, 0, 0);
+        color = transparentColor(color, 200);
+        int h = 40;
+
+        JPanel myHeader = new JPanel();
+        myHeader.setBounds(0, 0, width, height);
+        myHeader.setLayout(null);
+        myHeader.setOpaque(false);
+        panel.add(myHeader);
+
+        JPanel panelHeader = new JPanel();
+        panelHeader.setLayout(null);
+        panelHeader.setBackground(new Color(204, 51, 102));
+        panelHeader.setBounds(0, 0, width, h);
+        myHeader.add(panelHeader);
+
+        JLabel lblMenu = new JLabel("MENU");
+        lblMenu.setForeground(new Color(255, 255, 255));
+        lblMenu.setFont(new Font("Liberation Sans", Font.BOLD, 15));
+        lblMenu.setBounds(38, 2, 51, 30);
+        panelHeader.add(lblMenu);
+
+        JButton btnMenu = new JButton("||||");
+        btnMenu.setBorderPainted(false);
+        btnMenu.setBounds(-13, 0, 63, 35);
+        panelHeader.add(btnMenu);
+        btnMenu.setContentAreaFilled(false);
+        btnMenu.setForeground(new Color(255, 255, 255));
+        btnMenu.setFont(new Font("Jamrul", Font.BOLD, 16));
+
+        JLabel lblUser = new JLabel();
+        String s = username + "@traveler";
+        lblUser.setText(s);
+        lblUser.setForeground(UIManager.getColor("EditorPane.foreground"));
+        lblUser.setFont(new Font("Liberation Sans", Font.PLAIN, 17));
+        lblUser.setBounds((width-150), 6, 122, 28);
+        panelHeader.add(lblUser);
+
+        final JPanel panelMenu = new JPanel();
+        panelMenu.setLayout(null);
+        panelMenu.setBorder(null);
+        panelMenu.setVisible(false);
+        panelMenu.setBackground(color);
+        panelMenu.setBounds(0, h, 139, 187);
+        myHeader.add(panelMenu);
+
+        JButton btnNewButton_1 = new JButton("Home");
+        btnNewButton_1.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
+        btnNewButton_1.setForeground(new Color(255, 255, 255));
+        btnNewButton_1.setContentAreaFilled(false);
+        btnNewButton_1.setBorderPainted(false);
+        btnNewButton_1.setBounds(2, 0, 137, 27);
+        btnNewButton_1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                agencyGui.getFrame().setVisible(false);
+                try {
+                    agencyGui.homePageWindow();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        panelMenu.add(btnNewButton_1);
+
+        JButton btnNewButton_2 = new JButton("My Agency profile");
+        btnNewButton_2.setContentAreaFilled(false);
+        btnNewButton_2.setBorderPainted(false);
+        btnNewButton_2.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
+        btnNewButton_2.setForeground(new Color(255, 255, 255));
+        btnNewButton_2.setBounds(2, 27, 137, 27);
+        panelMenu.add(btnNewButton_2);
+        btnNewButton_2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                agencyGui.getFrame().setVisible(false);
+                try {
+                    agencyGui.profileWindow();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        JButton btnNewButton_3 = new JButton("Tickets");
+        btnNewButton_3.setContentAreaFilled(false);
+        btnNewButton_3.setBorderPainted(false);
+        btnNewButton_3.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
+        btnNewButton_3.setForeground(new Color(255, 250, 250));
+        btnNewButton_3.setBounds(2, 54, 137, 27);
+        panelMenu.add(btnNewButton_3);
+        btnNewButton_3.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                agencyGui.getFrame().setVisible(false);
+                try {
+                    agencyGui.ticketsWindow();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        JButton btnNewButton_4 = new JButton("Transports");
+        btnNewButton_4.setContentAreaFilled(false);
+        btnNewButton_4.setBorderPainted(false);
+        btnNewButton_4.setForeground(new Color(255, 255, 255));
+        btnNewButton_4.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
+        btnNewButton_4.setBounds(2, 81, 137, 27);
+        panelMenu.add(btnNewButton_4);
+
+        JButton btnNewButton_6 = new JButton("Settings");
+        btnNewButton_6.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
+        btnNewButton_6.setForeground(new Color(255, 255, 255));
+        btnNewButton_6.setContentAreaFilled(false);
+        btnNewButton_6.setBorderPainted(false);
+        btnNewButton_6.setBounds(2, 108, 137, 27);
+        btnNewButton_6.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                agencyGui.getFrame().setVisible(false);
+                try {
+                    agencyGui.settingsWindow();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        panelMenu.add(btnNewButton_6);
+
+        JButton btnNewButton_7 = new JButton("Messages");
+        btnNewButton_7.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
+        btnNewButton_7.setForeground(new Color(255, 255, 255));
+        btnNewButton_7.setContentAreaFilled(false);
+        btnNewButton_7.setBorderPainted(false);
+        btnNewButton_7.setBounds(2, 135, 137, 27);
+        btnNewButton_7.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                agencyGui.getFrame().setVisible(false);
+                try {
+                    agencyGui.chatWindow();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        panelMenu.add(btnNewButton_7);
+
+        JButton btnNewButton_8 = new JButton("Log Out");
+        btnNewButton_8.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
+        btnNewButton_8.setForeground(new Color(255, 255, 255));
+        btnNewButton_8.setContentAreaFilled(false);
+        btnNewButton_8.setBorderPainted(false);
+        btnNewButton_8.setBounds(2, 162, 137, 27);
+        panelMenu.add(btnNewButton_8);
+
+
+        btnMenu.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                index[0]++;
+                if (index[0] % 2 == 0)
+                    panelMenu.setVisible(false);
+                else panelMenu.setVisible(true);
+            }
+        });
+
+        add(panel);
+    }
+
+    private Color transparentColor(Color color, int transparencyGradient) {
+        return new Color(color.getRed(), color.getGreen(), color.getBlue(), transparencyGradient);
+    }
+
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(450, 500);
+        return new Dimension(width, height);
     }
 
     @Override

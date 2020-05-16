@@ -1,4 +1,5 @@
-package ptMiri;
+package Main;
+
 import java.awt.EventQueue;
 import java.sql.DriverManager;
 
