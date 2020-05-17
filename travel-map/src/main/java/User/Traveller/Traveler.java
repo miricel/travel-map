@@ -33,21 +33,9 @@ public class Traveler extends User {
     public String getStringColumn(String column) throws SQLException {
         return super.getStringColumn("Travelers", column);
     }
-
-    public void showTickets(int travelerID, String s) {
-
-    }
-
-    public void giveReview(String title, String comment) throws SQLException {
-
-        String query="INSERT INTO Reviews (travelerID, title, comment) VALUES" + "(?, ?, ?)";
-        PreparedStatement preparedStm = (PreparedStatement) con.prepareStatement(query);
-        preparedStm.setInt(1, id);
-        preparedStm.setString(2, title);
-        preparedStm.setString(3, comment);
-        preparedStm.execute();
-        preparedStm.close();
-
-    }
+    
+	public boolean isCorrectPassword(String password) throws SQLException {
+		return super.isCorrectPassword("Travelers", password);
+	}
 
 }

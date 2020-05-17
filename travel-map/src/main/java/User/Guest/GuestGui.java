@@ -14,7 +14,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextPane;
-
 import User.Agency.AgencyGui;
 import User.Traveller.TravelerGui;
 import User.Utility;

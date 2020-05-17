@@ -1,5 +1,10 @@
 package Component;
 
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
 
 import javax.swing.*;
 import java.awt.*;
