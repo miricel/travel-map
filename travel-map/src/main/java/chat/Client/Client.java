@@ -1,8 +1,8 @@
 package chat.Client;
 
 import com.mysql.jdbc.PreparedStatement;
-import com.mysql.jdbc.StringUtils;
 
+import org.apache.commons.lang3.StringUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -76,14 +76,14 @@ public class Client {
             conv = myRS.getInt("id");
         else
         {
-            query = "INSERT INTO conversation (user1, user2) VALUES" + "(?, ?)";
+            query = "INSERT INTO conversation (user1, user2) VALUES (?, ?)";
             PreparedStatement preparedStm = (PreparedStatement) con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             preparedStm.setString(1, username);
             preparedStm.setString(2, dest);
             preparedStm.executeUpdate();
             ResultSet rs = preparedStm.getGeneratedKeys();
-            if(myRS.next())
-                conv = myRS.getInt("id");
+            if(rs.next())
+                conv = rs.getInt("id");
             else throw new SQLException();
             preparedStm.close();
         }
@@ -143,13 +143,13 @@ public class Client {
             @Override
             public void run() {
                 running.set(true);
-                //readMessageLoop();
+                readMessageLoop();
             }
         };
         thread.start();
     }
 
-  /*  private void readMessageLoop() {
+    private void readMessageLoop() {
         String line;
         try{
             while ( running.get() && ((line = input.readLine()) != null) ) {
@@ -173,7 +173,7 @@ public class Client {
         }
 
       //  disconnect();
-    } */
+    }
 
     private void handleMessage(String[] tokensMsg) {
         String from = tokensMsg[1];

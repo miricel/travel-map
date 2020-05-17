@@ -2,11 +2,14 @@ package chat.Client;
 
 
 
+import User.Utility;
+
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 
 public class ConnectChatWindow {
@@ -79,7 +82,12 @@ public class ConnectChatWindow {
                 String user = textUsername.getText();
 
                 System.out.println(user);
-                String password = textPassword.getText();
+                String password = null;
+                try {
+                    password = Utility.hashPassword(textPassword.getText());
+                } catch (NoSuchAlgorithmException ex) {
+                    ex.printStackTrace();
+                }
                 doLogin(user,password);
             }
         });

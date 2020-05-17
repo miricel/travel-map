@@ -71,7 +71,7 @@ public class MessagePane extends JFrame implements MessageListener {
     private void readOldMessages() {
 
         Statement mystate = null;
-        int conv = 222;
+        int conv = 0 ;
         try {
             mystate = con.createStatement();
 
@@ -80,6 +80,7 @@ public class MessagePane extends JFrame implements MessageListener {
             ResultSet myRS = mystate.executeQuery(query);
             if (myRS.next())
                 conv = myRS.getInt("id");
+            else return;
 
         } catch (SQLException e) {
             e.printStackTrace();
