@@ -487,8 +487,7 @@ public class AgencyGui {
         });
 
     }
-
-    public void chatWindow() throws SQLException {
+        public void chatWindow() throws SQLException {
 
         frame = new JFrame();
         frame.setBounds(100, 100, 450, 400);

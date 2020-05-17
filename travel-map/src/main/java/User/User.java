@@ -17,7 +17,7 @@ import com.mysql.jdbc.PreparedStatement;
 
 public abstract class User {
 
-	protected int id;
+	public int id;
 	public Connection con;
 	
 	public User(java.sql.Connection con, int id) {
