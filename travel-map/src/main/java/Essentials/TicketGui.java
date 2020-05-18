@@ -1,4 +1,5 @@
 package Essentials;
+import Main.Main;
 import User.Traveller.Traveler;
 import com.mysql.jdbc.Connection;
 
@@ -7,18 +8,16 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
+import java.net.URL;
 
 import static java.awt.Font.PLAIN;
 
@@ -30,19 +29,24 @@ public class TicketGui extends JPanel {
     private JPanel customer;
     private JPanel date;
     private JPanel details;
+    private JPanel accept;
     private int width = 230;
     private int height = 125;
+    private JLabel status;
 
     public TicketGui(Connection con,int id) throws SQLException {
         this.con = con;
         this.id = id;
         setBorder(new EmptyBorder(0,1,0,1));
+        setOpaque(false);
 
         ticket = new Ticket(con,id);
         setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+        setBorder(new LineBorder(Color.pink,2));
         try {
             customer = customerFabric();
             details = detailsFabric();
+            accept = acceptFabric();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -50,6 +54,7 @@ public class TicketGui extends JPanel {
         add(customer);
         add(date);
         add(details);
+        add(accept);
     }
 
     private JPanel detailsFabric() throws SQLException, IOException {
@@ -64,13 +69,13 @@ public class TicketGui extends JPanel {
         String transportphoto = ticket.getStringColumn("transport_mean");
 
         if(transportphoto.equalsIgnoreCase("plane"))
-            transportphoto = "resources/agency.png";
+            transportphoto = "resources/planemini.png";
         else if(transportphoto.equalsIgnoreCase("bus"))
-            transportphoto = "resources/agency.png";
+            transportphoto = "resources/busmini.png";
         else if(transportphoto.equalsIgnoreCase("train"))
-            transportphoto = "resources/agency.png";
+            transportphoto = "resources/trainmini.png";
         else if(transportphoto.equalsIgnoreCase("ferryboat"))
-            transportphoto = "resources/agency.png";
+            transportphoto = "resources/boatmini.png";
         else  transportphoto = "resources/agency.png";
 
 
@@ -95,8 +100,8 @@ public class TicketGui extends JPanel {
         g2d.dispose();
 
         JLabel lblimage = new JLabel(new ImageIcon(masked));
-        lblimage.setPreferredSize(new Dimension(90,95));
-        lblimage.setBorder(new EmptyBorder(10,10,15,10));
+        lblimage.setPreferredSize(new Dimension(90,125));
+        lblimage.setBorder(new EmptyBorder(10,10,10,10));
         panel.add(lblimage);
 
         ////
@@ -125,7 +130,12 @@ public class TicketGui extends JPanel {
         price.setPreferredSize(new Dimension(125,20));
 
         //// status??
-        JLabel status = new JLabel(ticket.getStringColumn("status"));
+        status = new JLabel();
+        String st = ticket.getStringColumn("status");
+        if(st.equalsIgnoreCase("acepted"))
+            status.setForeground(new Color(73, 168, 25));
+        else if(st.equalsIgnoreCase("Rejected"))
+            status.setForeground(Color.red);
         status.setForeground(Color.black);
         status.setFont(new Font("Liberation Sans", Font.ITALIC, 14));
         setBorder(new EmptyBorder(0,0,0,0));
@@ -145,7 +155,6 @@ public class TicketGui extends JPanel {
 
         return panel;
     }
-
     private JPanel dateFabric() throws SQLException {
 
         JPanel panel = new JPanel();
@@ -209,7 +218,6 @@ public class TicketGui extends JPanel {
         panel.add(arrival);
         return panel;
     }
-
     private JPanel customerFabric() throws IOException, SQLException {
 
         JPanel panel = new JPanel();
@@ -272,6 +280,125 @@ public class TicketGui extends JPanel {
         panel.add(lblimage);
         ///////////////
         
+        return panel;
+    }
+    private JPanel acceptFabric() throws IOException {
+        JPanel panel = new JPanel();
+        panel.setPreferredSize(new Dimension(width,55));
+        panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
+        panel.setOpaque(false);
+
+        JButton yes = new JButton();
+        JButton no = new JButton();
+
+        JLabel yeslbl = new JLabel("");
+        JLabel nolbl = new JLabel("");
+
+        BufferedImage yesicon = resize(ImageIO.read(new File("resources/yes.png")),45,45);
+        BufferedImage noicon = resize(ImageIO.read(new File("resources/no.png")),45,45);
+
+        Color color = new Color(230, 210, 200);
+
+        yes.setBackground(color);
+        no.setBackground(color);
+        yes.setPreferredSize(new Dimension(width/2,50));
+        no.setPreferredSize(new Dimension(width/2,50));
+        yes.setBorder(new LineBorder(color.brighter()));
+        no.setBorder(new LineBorder(color.brighter()));
+
+        yes.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                yes.setBackground( new Color(73, 168, 25));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                yes.setBackground(color);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                yes.setBackground(new Color(10, 100, 30));
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                yes.setBackground(color);
+            }
+
+        });
+
+        no.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                no.setBackground(Color.red);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                no.setBackground(color);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                no.setBackground(new Color(100, 10, 30));
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                no.setBackground(color);
+            }
+
+        });
+
+        yes.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent arg0) {
+
+                try {
+                    ticket.setStringColumn("status","Accepted");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                status.setText("Accepted");
+                status.setForeground(new Color(73, 168, 25));
+                setBorder(new LineBorder(new Color(73, 168, 25),2));
+                revalidate();
+                repaint();
+            }
+        });
+
+        no.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent arg0) {
+
+                try {
+                    ticket.setStringColumn("status","Rejected");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                status.setText("Rejected");
+                status.setForeground(Color.red);
+                setBorder(new LineBorder(Color.RED,2));
+
+                revalidate();
+                repaint();
+            }
+        });
+
+        yeslbl.setPreferredSize(new Dimension(width/2,45));
+        yeslbl.setIcon(new ImageIcon(yesicon));
+        yeslbl.setBorder(new EmptyBorder(6,40,6,40));
+        yes.add(yeslbl);
+
+        nolbl.setPreferredSize(new Dimension(width/2,45));
+        nolbl.setIcon(new ImageIcon(noicon));
+        nolbl.setBorder(new EmptyBorder(6,40,6,40));
+        no.add(nolbl);
+
+        panel.add(yes);
+        panel.add(no);
         return panel;
     }
 

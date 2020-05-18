@@ -1,6 +1,8 @@
 package User.Agency;
 
 import Essentials.TicketGui;
+import Essentials.Transport;
+import Essentials.TransportGui;
 import com.mysql.jdbc.Connection;
 
 
@@ -16,12 +18,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import Component.BackgroundList;
+import Component.AddElement;
 import Component.BackgroundPanel;
-import Component.myRowJPanel;
 import chat.Client.ConnectChatWindow;
-
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 
@@ -542,8 +541,9 @@ public class AgencyGui {
 
         contentPanel.myHeader(agency.getStringColumn("username"),this);
 
-        DefaultListModel<JPanel> listModel = new DefaultListModel<>();
-        JList<JPanel> jPanelJList = new JList<>(listModel);
+
+        AddElement tickets = new AddElement(1,0,1,1,1000,450,35,50);
+        tickets.setOpaque(false);
 
         Statement mystate = null;
         try {
@@ -553,7 +553,7 @@ public class AgencyGui {
             ResultSet myRS = mystate.executeQuery(query);
             while (myRS.next()) {
                 TicketGui ticketGui = new TicketGui(con, myRS.getInt("id"));
-                listModel.addElement(ticketGui);
+                tickets.addNew(ticketGui);
             }
 
         } catch (SQLException e) {
@@ -566,25 +566,58 @@ public class AgencyGui {
                 System.out.println(">Error: " + e);
             }
         }
-
-        myRowJPanel row = new myRowJPanel();
-        jPanelJList.setCellRenderer(row);
-        jPanelJList.setOpaque(false);
-        jPanelJList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        jPanelJList.setVisibleRowCount(1);
-        JScrollPane scroll = new JScrollPane(jPanelJList);
-        scroll.setBounds(0,130,1000,450);
-        scroll.setBorder(new EmptyBorder(0,35,0,35));
-        //  Color color = new Color(225, 100, 225);
-        // color = transparentColor(color, 100);
-        scroll.setOpaque(false);
-        scroll.getViewport().setOpaque(false);
-
-        contentPanel.add(scroll);
+        contentPanel.add(tickets);
 
     }
 
-    private void transportsWindow() {
+    public void seeTransportsWindow() throws SQLException {
+
+
+        frame = new JFrame();
+        frame.setBounds(100, 100, width, height);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // frame.getContentPane().setLayout(new BorderLayout());
+        frame.getContentPane().setLayout(null);
+        frame.setVisible(true);
+
+
+        BackgroundPanel contentPanel= new BackgroundPanel(backgroundimg,width,width);
+        contentPanel.setBounds(0,0,width,height);
+        frame.getContentPane().add(contentPanel);
+        contentPanel.setLayout(null);
+
+        contentPanel.myHeader(agency.getStringColumn("username"),this);
+
+
+        AddElement transports = null;
+        try {
+            transports = new AddElement(0,1,1,1,1000,740,90,110);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        transports.setOpaque(false);
+        Statement mystate = null;
+        try {
+            mystate = con.createStatement();
+
+            String query = "SELECT * FROM transport where agnecies_id = "+ agency.getID();
+            ResultSet myRS = mystate.executeQuery(query);
+            while (myRS.next()) {
+                TransportGui transportGui = new TransportGui(con, myRS.getInt("id"));
+                transports.addNew(transportGui);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                if(mystate != null) mystate.close();
+            }catch(Exception e)
+            {
+                System.out.println(">Error: " + e);
+            }
+        }
+        contentPanel.add(transports);
 
     }
 
