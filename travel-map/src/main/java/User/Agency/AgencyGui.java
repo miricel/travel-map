@@ -34,7 +34,6 @@ public class AgencyGui {
     private int height = 700;
     private BufferedImage backgroundimg = resize(ImageIO.read(new File("resources/transports2.jpg")),width,width);
 
-
     public AgencyGui(Connection con, int id) throws SQLException, IOException {
         this.con = con;
         agency = new Agency(con, id);
@@ -571,7 +570,6 @@ public class AgencyGui {
     }
 
     public void seeTransportsWindow() throws SQLException {
-
 
         frame = new JFrame();
         frame.setBounds(100, 100, width, height);

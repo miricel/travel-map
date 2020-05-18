@@ -1,19 +1,24 @@
 package User.Traveller;
 import Component.BackgroundList;
 import Component.BackgroundPanel;
+import Essentials.TransportGui;
 import User.Utility;
 import Essentials.Review;
 import Essentials.ReviewGui;
+import Component.AddElement;
 import User.Utility;
 import Component.myRowJPanel;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import chat.Client.ConnectChatWindow;
 import com.mysql.jdbc.Connection;
@@ -21,6 +26,7 @@ import User.Guest.GuestGui;
 
 import javax.swing.border.*;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Statement;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -43,13 +49,24 @@ public class TravelerGui {
         }
     }
 
-	private JFrame frame;
+    private BufferedImage backgroundimg = resize(ImageIO.read(new File("resources/transports2.jpg")),1000,700);
+    private JFrame frame;
 	private Traveler traveler;
 	private int index;
 	private boolean flag = false;
 	private Connection con;
 	private String path;
 
+    private static BufferedImage resize(BufferedImage img, int newW, int newH) {
+        Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+        BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2d = dimg.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+
+        return dimg;
+    }
 
 	public TravelerGui(Connection con, int id) throws SQLException, IOException {
 		this.con = con;
@@ -761,6 +778,56 @@ public class TravelerGui {
 		frame.getContentPane().add(jp);
 
 	}
+
+    public void seeTransportsWindow() throws SQLException {
+
+        frame = new JFrame();
+        frame.setBounds(100, 100, 1000, 700);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // frame.getContentPane().setLayout(new BorderLayout());
+        frame.getContentPane().setLayout(null);
+        frame.setVisible(true);
+
+
+        BackgroundPanel contentPanel= new BackgroundPanel(backgroundimg, 1000, 700);
+        contentPanel.setBounds(0,0, 1000, 700);
+        frame.getContentPane().add(contentPanel);
+        contentPanel.setLayout(null);
+
+        myHeader();
+
+
+        AddElement transports = null;
+        try {
+            transports = new AddElement(0,1,1,1,1000,740,90,110);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        transports.setOpaque(false);
+        Statement mystate = null;
+        try {
+            mystate = con.createStatement();
+
+            String query = "SELECT * FROM transport";
+            ResultSet myRS = mystate.executeQuery(query);
+            while (myRS.next()) {
+                TransportGui transportGui = new TransportGui(con, myRS.getInt("id"));
+                transports.addNew(transportGui);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                if(mystate != null) mystate.close();
+            }catch(Exception e)
+            {
+                System.out.println(">Error: " + e);
+            }
+        }
+        contentPanel.add(transports);
+
+    }
 
 	private void chatWindow() throws SQLException {
 
