@@ -1,6 +1,8 @@
 package User.Traveller;
+import Component.BackgroundList;
 import Component.BackgroundPanel;
 import Essentials.Review;
+import Essentials.ReviewGui;
 import User.Utility;
 import Component.myRowJPanel;
 import java.awt.event.ActionEvent;
@@ -34,7 +36,7 @@ import javax.swing.UIManager;
 
 public class TravelerGui {
 
-    public class userButton extends JButton {
+    public static class userButton extends JButton {
         public int id;
 
         public userButton(int id) {
@@ -715,116 +717,49 @@ public class TravelerGui {
 
 	private void feedWindow() throws SQLException, IOException {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1000, 700);
+		frame.setSize(1000, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.getContentPane().setLayout(null);
 
 		myHeader();
 
-		Color c = new Color(255, 255, 255);
-		c = transparentColor(c, 190);
-
 		Review r = new Review(traveler.con);
 		r.getReviews('>', -1);
 
-		DefaultListModel<JPanel> listModel = new DefaultListModel<>();
-		JList<JPanel> jPanelJList = new JList<>(listModel);
-
-		int i = 60;
+		DefaultListModel<ReviewGui> listModel = new DefaultListModel<>();
+		JList<ReviewGui> list = new JList<>(listModel);
+		list.setCellRenderer(new myRowJPanel());
 
 		while(r.result.next()) {
-			JPanel mainPanel = new JPanel();
-			mainPanel.setBounds(100, i, 750, 270);
-			mainPanel.setOpaque(false);
-			mainPanel.setLayout(null);
-			frame.getContentPane().add(mainPanel);
-
-			JPanel panel = new JPanel();
-			panel.setLayout(null);
-			panel.setBackground(new Color(255, 255, 255));
-			panel.setBounds(30, 0, 300, 40);
-			panel.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
-			mainPanel.add(panel);
-
-			userButton btnNewButton_8 = new userButton(r.getId());
-			btnNewButton_8.setIcon(resizedImage(25, 25, r.getProfilePicTraveler()));
-			btnNewButton_8.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					frame.setVisible(false);
-					/*try {
-						travelerProfile(btnNewButton_8.id);
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}*/
-				}
-			});
-			btnNewButton_8.setBounds(12, 7, 25, 25);
-			panel.add(btnNewButton_8);
-
-			JLabel lblNewLabel_5 = new JLabel();
-			lblNewLabel_5.setText(r.getNameSurnameTraveler());
-			lblNewLabel_5.setFont(new Font("Liberation Sans", Font.PLAIN, 17));
-			lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_5.setBounds(42, 10, 169, 15);
-			panel.add(lblNewLabel_5);
-
-			JPanel p = new JPanel();
-			p.setBackground(c);
-			p.setLayout(null);
-			p.setBounds(0, 20, 750, 270);
-			mainPanel.add(p);
-
-			JLabel label = new JLabel();
-			label.setBounds(40, 40, 200, 200);
-			label.setIcon(resizedImage(170, 170, r.getPic()));
-			p.add(label);
-
-			JLabel lblTitle = new JLabel();
-			lblTitle.setText(r.getTitle());
-			lblTitle.setFont(new Font("Liberation Sans", Font.BOLD, 17));
-			lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
-			lblTitle.setBounds(330, 25, 262, 15);
-			p.add(lblTitle);
-
-			JEditorPane content = new JEditorPane();
-			content.setText(r.getContent());
-			content.setOpaque(false);
-			content.setForeground(Color.GRAY);
-			content.setEditable(false);
-			content.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
-			content.setBounds(260, 50, 440, 170);
-			p.add(content);
-
-			listModel.addElement(mainPanel);
-			i = i + 310;
+			ReviewGui rg = new ReviewGui(frame);
+			rg.id = r.getId();
+			rg.travelerPic = r.getProfilePicTraveler();
+			rg.namesurname = r.getNameSurnameTraveler();
+			rg.title = r.getTitle();
+			rg.content = r.getContent();
+			rg.pic = r.getPic();
+			rg.buildReviewPanel();
+			listModel.addElement(rg);
 		}
-
-		r.result.close();
-
-		myRowJPanel row = new myRowJPanel();
-		jPanelJList.setCellRenderer(row);
-		jPanelJList.setOpaque(false);
-		jPanelJList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-		jPanelJList.setVisibleRowCount(1);
-		JScrollPane scroll = new JScrollPane(jPanelJList);
-		scroll.setBounds(0,130,1000,450);
-		scroll.setBorder(new EmptyBorder(0,35,0,35));
-		//  Color color = new Color(225, 100, 225);
-		// color = transparentColor(color, 100);
-		scroll.setOpaque(false);
-		scroll.getViewport().setOpaque(false);
-
-		frame.getContentPane().add(scroll);
 
 		JLabel background = new JLabel();
 		background.setBounds(0, 0, 1000, 706);
 		background.setBorder(null);
-		frame.getContentPane().add(background);
 		ImageIcon scaled = new ImageIcon(this.getClass().getResource("/transports2.jpg"));
 		scaled = resizedImage(background.getWidth(), background.getHeight(), scaled);
 		background.setIcon(scaled);
+
+
+		list.setOpaque(false);
+		JScrollPane jp = new JScrollPane(list);
+		jp.setBounds(0, 27, 1001, 645);
+		jp.setOpaque(false);
+		list.setVisibleRowCount(2);
+		list.setLayout(null);
+		list.setFixedCellWidth(40);
+		list.setFixedCellHeight(310);
+		frame.getContentPane().add(jp);
 
 	}
 
