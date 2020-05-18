@@ -562,7 +562,7 @@ public class AgencyGui {
 
         AddElement transports = null;
         try {
-            transports = new AddElement(0,1,1,1,1000,740,90,110);
+            transports = new AddElement(0,1,1,1,1000,460,90,90);
         } catch (SQLException e) {
             e.printStackTrace();
         }
