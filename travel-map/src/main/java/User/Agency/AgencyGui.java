@@ -21,6 +21,8 @@ import javax.swing.*;
 import Component.AddElement;
 import Component.BackgroundPanel;
 import chat.Client.ConnectChatWindow;
+
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 
@@ -33,6 +35,8 @@ public class AgencyGui {
     private int width = 1000;
     private int height = 700;
     private BufferedImage backgroundimg = resize(ImageIO.read(new File("resources/transports2.jpg")),width,width);
+    private int startW = 350;
+    private int startH = 150;
 
     public AgencyGui(Connection con, int id) throws SQLException, IOException {
         this.con = con;
@@ -70,7 +74,7 @@ public class AgencyGui {
     public void homePageWindow() throws SQLException {
 
         frame = new JFrame();
-        frame.setBounds(100, 100, width, height);
+        frame.setBounds(startW, startH, width, height);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // frame.getContentPane().setLayout(new BorderLayout());
         frame.getContentPane().setLayout(null);
@@ -83,14 +87,72 @@ public class AgencyGui {
         contentPanel.setLayout(null);
 
         contentPanel.myHeader(agency.getStringColumn("username"),this);
+
+        JButton seeTickets = new JButton("Approve Tickets");
+        seeTickets.setFont(new Font("Liberation Sans", Font.BOLD, 12));
+        seeTickets.setBackground(SystemColor.desktop);
+        seeTickets.setForeground(Color.WHITE);
+        seeTickets.setBounds(430, 200, 140, 25);
+        seeTickets.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.setVisible(false);
+                try {
+                    ticketsWindow();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        JButton seeTransports = new JButton("See Transports");
+        seeTransports.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.setVisible(false);
+                try {
+                    seeTransportsWindow();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        seeTransports.setBackground(SystemColor.desktop);
+        seeTransports.setForeground(new Color(255, 255, 255));
+        seeTransports.setFont(new Font("Liberation Sans", Font.BOLD, 13));
+        seeTransports.setBounds(430, 300, 140, 25);
+
+        JButton addTransports = new JButton("Add Transport");
+        addTransports.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.setVisible(false);
+                try {
+                    addTransport();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                } catch (FontFormatException ex) {
+                    ex.printStackTrace();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        addTransports.setBackground(SystemColor.desktop);
+        addTransports.setForeground(new Color(255, 255, 255));
+        addTransports.setFont(new Font("Liberation Sans", Font.BOLD, 13));
+        addTransports.setBounds(430, 400, 140, 25);
+
+        contentPanel.add(addTransports);
+        contentPanel.add(seeTickets);
+        contentPanel.add(seeTransports);
 
     }
 
-    public void profileWindow() throws SQLException {
+    public void addTransport() throws SQLException, IOException, FontFormatException {
+
         frame = new JFrame();
-        frame.setBounds(100, 100, width, height);
+        frame.setBounds(startW, startH, width, height);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // frame.getContentPane().setLayout(new BorderLayout());
         frame.getContentPane().setLayout(null);
         frame.setVisible(true);
 
@@ -102,48 +164,121 @@ public class AgencyGui {
 
         contentPanel.myHeader(agency.getStringColumn("username"),this);
 
-        JLabel lblProfilePic = new JLabel("");
-        lblProfilePic.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-        lblProfilePic.setBounds(182, 51, 86, 80);
-        frame.getContentPane().add(lblProfilePic);
+        Font font = Font.createFont(Font.TRUETYPE_FONT, TransportGui.class.getResourceAsStream("/romi.ttf"));
+        font = font.deriveFont(24f);
 
-        try {
-            ImageIcon pic = agency.getProfilePicture();
-            ImageIcon scaled = resizedImage(lblProfilePic.getWidth(), lblProfilePic.getHeight(), pic);
-            lblProfilePic.setIcon(scaled);
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        JPanel up = new JPanel();
+        JPanel right = new JPanel();
+        JPanel left = new JPanel();
 
+        JPanel destination = new JPanel();
+        JPanel origin = new JPanel();
+        JPanel others = new JPanel();
 
-        JLabel lblCover = new JLabel("");
-        lblCover.setBounds(0, 19, 450, 152);
-        frame.getContentPane().add(lblCover);
+        Dimension dim = new Dimension(100,  26);
 
-        ImageIcon cover = new ImageIcon(this.getClass().getResource("/fade.png"));
-        cover = resizedImage(lblCover.getWidth(), lblCover.getHeight(), cover);
-        lblCover.setIcon(cover);
+        /**others*/
 
-        try {
-            String s = agency.getStringColumn("name");
-            JLabel lblNameSurname = new JLabel(s);
-            lblNameSurname.setHorizontalAlignment(SwingConstants.CENTER);
-            lblNameSurname.setBounds(142, 136, 170, 15);
-            frame.getContentPane().add(lblNameSurname);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        //capacity
+        JLabel caplbl = new JLabel("Number of Seats:");
+        caplbl.setFont(font.deriveFont(Font.BOLD));
+        caplbl.setPreferredSize(dim);
+        caplbl.setForeground(Color.black);
+
+        //type - jlist?
+        JLabel type = new JLabel("Transport Mean:");
+        type.setFont(font.deriveFont(Font.BOLD));
+        type.setPreferredSize(dim);
+        type.setForeground(Color.black);
+
+        // price
+        JLabel pricelbl = new JLabel("Price:");
+        pricelbl.setFont(font.deriveFont(Font.BOLD));
+        pricelbl.setPreferredSize(dim);
+        pricelbl.setForeground(Color.black);
+
+        others.add(caplbl);
+        others.add(type);
+        others.add(pricelbl);
+
+        others.setLayout(new BoxLayout(others,BoxLayout.Y_AXIS));
+        others.setBounds(100,90,800,260);
+        others.setBackground(new Color(180,120,125));
+        others.setBorder(new EmptyBorder(0,100,0,0));
+
+        /**destination*/
+
+        //city
+        JLabel citylbl = new JLabel("To::");
+        citylbl.setFont(font.deriveFont(Font.BOLD));
+        citylbl.setPreferredSize(dim);
+        citylbl.setForeground(Color.black);
+        //day
+        JLabel daylbl = new JLabel("Arrival day:");
+        daylbl.setFont(font.deriveFont(Font.BOLD));
+        daylbl.setPreferredSize(dim);
+        daylbl.setForeground(Color.black);
+        //hour
+        JLabel hourlbl = new JLabel("Arrival hour:");
+        hourlbl.setFont(font.deriveFont(Font.BOLD));
+        hourlbl.setPreferredSize(dim);
+        hourlbl.setForeground(Color.black);
+
+        destination.add(citylbl);
+        destination.add(daylbl);
+        destination.add(hourlbl);
+
+        destination.setLayout(new BoxLayout(destination,BoxLayout.Y_AXIS));
+        destination.setBounds(505,360,395,250);
+        destination.setBackground(new Color(180,120,125));
+        destination.setBorder(new EmptyBorder(0,100,0,0));
+
+        /**origin*/
+
+        //city
+        JLabel ociytlbl = new JLabel("From:");
+        ociytlbl.setFont(font.deriveFont(Font.BOLD));
+        ociytlbl.setPreferredSize(dim);
+        ociytlbl.setForeground(Color.black);
+        //day
+        JLabel ocitylbl = new JLabel("Departure day:");
+        ocitylbl.setFont(font.deriveFont(Font.BOLD));
+        ocitylbl.setPreferredSize(dim);
+        ocitylbl.setForeground(Color.black);
+        //hour
+        JLabel ohourlbl = new JLabel("Departure hour:");
+        ohourlbl.setFont(font.deriveFont(Font.BOLD));
+        ohourlbl.setPreferredSize(dim);
+        ohourlbl.setForeground(Color.black);
+
+        origin.add(ociytlbl);
+        origin.add(ocitylbl);
+        origin.add(ohourlbl);
+
+        origin.setLayout(new BoxLayout(origin,BoxLayout.Y_AXIS));
+        origin.setBounds(100,360,395,250);
+        origin.setBackground(new Color(180,120,125));
+        origin.setBorder(new EmptyBorder(0,100,0,0));
+
+        contentPanel.add(others);
+        contentPanel.add(origin);
+        contentPanel.add(destination);
+
+      /*  up.setBounds(100,80,800,200);
+        left.setBounds(100,80,800,200);
+        right.setBounds(100,80,800,200);
+        others.setBackground(new Color(180,120,125));
+        others.setBackground(new Color(180,120,125));
+        others.setBackground(new Color(180,120,125));
+*/
+
 
     }
 
     public void settingsWindow() throws SQLException {
 
         frame = new JFrame();
-        frame.setBounds(100, 100, width, height);
+        frame.setBounds(startW, startH, width, height);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        // frame.getContentPane().setLayout(new BorderLayout());
         frame.getContentPane().setLayout(null);
@@ -314,186 +449,23 @@ public class AgencyGui {
 
     }
 
-    private void myHeader() {
-
-        index = 0;
-        Color color = new Color(0, 0, 0);
-        color = transparentColor(color, 200);
-
-        JPanel myHeader = new JPanel();
-        myHeader.setBounds(0, 0, 450, 246);
-        myHeader.setLayout(null);
-        myHeader.setOpaque(false);
-        frame.getContentPane().add(myHeader);
-
-        JPanel panelHeader = new JPanel();
-        panelHeader.setLayout(null);
-        panelHeader.setBackground(new Color(204, 51, 102));
-        panelHeader.setBounds(0, 0, 450, 27);
-        myHeader.add(panelHeader);
-
-        JLabel lblMenu = new JLabel("MENU");
-        lblMenu.setForeground(new Color(255, 255, 255));
-        lblMenu.setFont(new Font("Liberation Sans", Font.BOLD, 13));
-        lblMenu.setBounds(38, 0, 51, 27);
-        panelHeader.add(lblMenu);
-
-        JButton btnMenu = new JButton("||||");
-        btnMenu.setBorderPainted(false);
-        btnMenu.setBounds(-13, -2, 63, 27);
-        panelHeader.add(btnMenu);
-        btnMenu.setContentAreaFilled(false);
-        btnMenu.setForeground(new Color(255, 255, 255));
-        btnMenu.setFont(new Font("Jamrul", Font.BOLD, 14));
-
-        JLabel lblUser = new JLabel();
-        try {
-            String s = agency.getStringColumn("username");
-            s = s + "@traveler";
-            lblUser.setText(s);
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        lblUser.setForeground(UIManager.getColor("EditorPane.foreground"));
-        lblUser.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
-        lblUser.setBounds(316, 6, 122, 15);
-        panelHeader.add(lblUser);
-
-        final JPanel panelMenu = new JPanel();
-        panelMenu.setLayout(null);
-        panelMenu.setBorder(null);
-        panelMenu.setVisible(false);
-        panelMenu.setBackground(color);
-        panelMenu.setBounds(0, 27, 139, 187);
-        myHeader.add(panelMenu);
-
-        JButton btnNewButton_1 = new JButton("Home");
-        btnNewButton_1.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
-        btnNewButton_1.setForeground(new Color(255, 255, 255));
-        btnNewButton_1.setContentAreaFilled(false);
-        btnNewButton_1.setBorderPainted(false);
-        btnNewButton_1.setBounds(2, 0, 137, 27);
-        btnNewButton_1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                frame.setVisible(false);
-                try {
-                    homePageWindow();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        panelMenu.add(btnNewButton_1);
-
-        JButton btnNewButton_2 = new JButton("My Agency profile");
-        btnNewButton_2.setContentAreaFilled(false);
-        btnNewButton_2.setBorderPainted(false);
-        btnNewButton_2.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
-        btnNewButton_2.setForeground(new Color(255, 255, 255));
-        btnNewButton_2.setBounds(2, 27, 137, 27);
-        panelMenu.add(btnNewButton_2);
-        btnNewButton_2.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                frame.setVisible(false);
-                try {
-                    profileWindow();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        JButton btnNewButton_3 = new JButton("Tickets");
-        btnNewButton_3.setContentAreaFilled(false);
-        btnNewButton_3.setBorderPainted(false);
-        btnNewButton_3.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
-        btnNewButton_3.setForeground(new Color(255, 250, 250));
-        btnNewButton_3.setBounds(2, 54, 137, 27);
-        panelMenu.add(btnNewButton_3);
-        btnNewButton_3.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                frame.setVisible(false);
-                try {
-                    ticketsWindow();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        JButton btnNewButton_4 = new JButton("Transports");
-        btnNewButton_4.setContentAreaFilled(false);
-        btnNewButton_4.setBorderPainted(false);
-        btnNewButton_4.setForeground(new Color(255, 255, 255));
-        btnNewButton_4.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
-        btnNewButton_4.setBounds(2, 81, 137, 27);
-        panelMenu.add(btnNewButton_4);
-
-        JButton btnNewButton_6 = new JButton("Settings");
-        btnNewButton_6.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
-        btnNewButton_6.setForeground(new Color(255, 255, 255));
-        btnNewButton_6.setContentAreaFilled(false);
-        btnNewButton_6.setBorderPainted(false);
-        btnNewButton_6.setBounds(2, 108, 137, 27);
-        btnNewButton_6.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                frame.setVisible(false);
-                try {
-                    settingsWindow();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        panelMenu.add(btnNewButton_6);
-
-        JButton btnNewButton_7 = new JButton("Messages");
-        btnNewButton_7.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
-        btnNewButton_7.setForeground(new Color(255, 255, 255));
-        btnNewButton_7.setContentAreaFilled(false);
-        btnNewButton_7.setBorderPainted(false);
-        btnNewButton_7.setBounds(2, 135, 137, 27);
-        btnNewButton_7.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                frame.setVisible(false);
-                try {
-                    chatWindow();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        panelMenu.add(btnNewButton_7);
-
-        JButton btnNewButton_8 = new JButton("Log Out");
-        btnNewButton_8.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
-        btnNewButton_8.setForeground(new Color(255, 255, 255));
-        btnNewButton_8.setContentAreaFilled(false);
-        btnNewButton_8.setBorderPainted(false);
-        btnNewButton_8.setBounds(2, 162, 137, 27);
-        panelMenu.add(btnNewButton_8);
-
-
-        btnMenu.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                index++;
-                if (index % 2 == 0)
-                    panelMenu.setVisible(false);
-                else panelMenu.setVisible(true);
-            }
-        });
-
-    }
-        public void chatWindow() throws SQLException {
+    public void chatWindow() throws SQLException {
 
         frame = new JFrame();
-        frame.setBounds(100, 100, 450, 400);
+        frame.setBounds(startW, startW, width, height);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // frame.getContentPane().setLayout(new BorderLayout());
         frame.getContentPane().setLayout(null);
         frame.setVisible(true);
 
-        myHeader();
+
+        BackgroundPanel contentPanel= new BackgroundPanel(backgroundimg,width,width);
+        contentPanel.setBounds(0,0,width,height);
+        frame.getContentPane().add(contentPanel);
+        contentPanel.setLayout(null);
+
+        contentPanel.myHeader(agency.getStringColumn("username"),this);
+
         final String username = agency.getStringColumn("agencies", "username");
         final String password = agency.getStringColumn("agencies", "password");
 
@@ -501,8 +473,8 @@ public class AgencyGui {
         Message.setFont(new Font("Liberation Sans", Font.BOLD, 12));
         Message.setBackground(SystemColor.desktop);
         Message.setForeground(Color.WHITE);
-        Message.setBounds(149, 40, 138, 25);
-        frame.getContentPane().add(Message);
+        Message.setBounds(430, 200, 140, 25);
+        contentPanel.add(Message);
         Message.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 new ConnectChatWindow(username, password, con);
@@ -519,14 +491,14 @@ public class AgencyGui {
         someoneElse.setBackground(SystemColor.desktop);
         someoneElse.setForeground(new Color(255, 255, 255));
         someoneElse.setFont(new Font("Liberation Sans", Font.BOLD, 13));
-        someoneElse.setBounds(149, 122, 138, 25);
-        frame.getContentPane().add(someoneElse);
+        someoneElse.setBounds(430, 300, 140, 25);
+        contentPanel.add(someoneElse);
     }
 
     public void ticketsWindow() throws SQLException {
 
         frame = new JFrame();
-        frame.setBounds(100, 100, width, height);
+        frame.setBounds(startW, startH, width, height);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // frame.getContentPane().setLayout(new BorderLayout());
         frame.getContentPane().setLayout(null);
@@ -571,8 +543,9 @@ public class AgencyGui {
 
     public void seeTransportsWindow() throws SQLException {
 
+
         frame = new JFrame();
-        frame.setBounds(100, 100, width, height);
+        frame.setBounds(startW, startH, width, height);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // frame.getContentPane().setLayout(new BorderLayout());
         frame.getContentPane().setLayout(null);
@@ -589,7 +562,7 @@ public class AgencyGui {
 
         AddElement transports = null;
         try {
-            transports = new AddElement(0,1,1,1,1000,740,90,110);
+            transports = new AddElement(0,1,1,1,1000,460,90,90);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -619,4 +592,7 @@ public class AgencyGui {
 
     }
 
+    public Connection getCon() {
+        return con;
+    }
 }

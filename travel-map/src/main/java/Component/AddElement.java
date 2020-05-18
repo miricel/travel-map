@@ -48,6 +48,7 @@ public class AddElement extends JPanel {
         setOpaque(false);
         scroll.setOpaque(false);
         scroll.getViewport().setOpaque(false);
+        scroll.setBounds(0,0,width,height);
 
         setLayout(new BorderLayout());
         add(scroll, BorderLayout.CENTER);

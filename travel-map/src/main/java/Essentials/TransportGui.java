@@ -188,8 +188,8 @@ public class TransportGui extends JPanel {
         JPanel panel = new JPanel();
         panel.setOpaque(false);
         panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
-        panel.setPreferredSize(new Dimension(height+10, height));
-        panel.setBorder(new EmptyBorder(15,30,0,20));
+        panel.setPreferredSize(new Dimension(height+20, height));
+        panel.setBorder(new EmptyBorder(15,30,0,27));
 
         String transportphoto = transportData.getString("type");
         String transportMean;
@@ -243,7 +243,8 @@ public class TransportGui extends JPanel {
 
         JLabel lbltransport = new JLabel(transportMean);
         lbltransport.setForeground(Color.black);
-        lbltransport.setFont(font.deriveFont(22f));
+        lbltransport.setFont(font.deriveFont(21f));
+        lbltransport.setBorder(new EmptyBorder(3,0,0,0));
         lbltransport.setAlignmentX(CENTER_ALIGNMENT);
         panel.add(lbltransport);
 
