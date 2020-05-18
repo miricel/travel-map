@@ -1,28 +1,32 @@
 package User.Traveller;
+import Component.BackgroundList;
 import Component.BackgroundPanel;
+import Essentials.TransportGui;
 import User.Utility;
 import Essentials.Review;
 import Essentials.ReviewGui;
+import Component.AddElement;
 import User.Utility;
 import Component.myRowJPanel;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import chat.Client.ConnectChatWindow;
 import com.mysql.jdbc.Connection;
 import User.Guest.GuestGui;
 
 import javax.swing.border.*;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Image;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Statement;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -32,22 +36,39 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import javax.swing.border.LineBorder;
-import java.awt.SystemColor;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
 
 public class TravelerGui {
 
-	private JFrame frame;
-	private Traveler traveler;
+    public static class userButton extends JButton {
+        public int id;
+
+        public userButton(int id) {
+            this.id = id;
+        }
+    }
+
+    private BufferedImage backgroundimg = resize(ImageIO.read(new File("resources/transports2.jpg")),1000,700);
+    public JFrame frame;
+	public Traveler traveler;
 	private int index;
 	private boolean flag = false;
 	private Connection con;
 	private String path;
+    private int startW = 350;
+    private int startH = 150;
 
-	private int startW = 350;
-	private int startH = 150;
+    private static BufferedImage resize(BufferedImage img, int newW, int newH) {
+        Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+        BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
 
+        Graphics2D g2d = dimg.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+
+        return dimg;
+    }
 
 	public TravelerGui(Connection con, int id) throws SQLException, IOException {
 		this.con = con;
@@ -125,7 +146,7 @@ public class TravelerGui {
 		JButton lblNewLabel_4= new JButton();
 		lblNewLabel_4.setContentAreaFilled(false);
 		lblNewLabel_4.setBorder(null);
-		ImageIcon search = new ImageIcon(this.getClass().getResource("/yes.png"));
+		ImageIcon search = new ImageIcon(this.getClass().getResource("/search.png"));
 		search = resizedImage(15, 15, search);
 		lblNewLabel_4.setIcon(search);
 		lblNewLabel_4.setBounds(487, 0, 25, 27);
@@ -168,12 +189,22 @@ public class TravelerGui {
 			}
 		});
 
-		JButton btnNewButton_3 = new JButton("Search users");
+		JButton btnNewButton_3 = new JButton("Search Transport");
 		btnNewButton_3.setContentAreaFilled(false);
 		btnNewButton_3.setBorderPainted(false);;
 		btnNewButton_3.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
 		btnNewButton_3.setForeground(new Color(255, 250, 250));
 		btnNewButton_3.setBounds(2, 54, 137, 27);
+        btnNewButton_3.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                frame.setVisible(false);
+                try {
+                    seeTransportsWindow();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 		panelMenu.add(btnNewButton_3);
 
 		JButton btnNewButton_4 = new JButton("Feed");
@@ -257,7 +288,7 @@ public class TravelerGui {
 
 	}
 
-	private void homePageWindow() {
+	public void homePageWindow() {
 
 		frame = new JFrame();
 		frame.setBounds(startW, startH, 1000, 700);
@@ -265,9 +296,18 @@ public class TravelerGui {
 		frame.getContentPane().setLayout(null);
 		frame.setVisible(true);
 
-		myHeader();
+        BackgroundPanel contentPanel= new BackgroundPanel(backgroundimg, 1000, 700);
+        contentPanel.setBounds(0,0, 1000, 700);
+        frame.getContentPane().add(contentPanel);
+        contentPanel.setLayout(null);
 
-		JPanel panelContent = new JPanel();
+        try {
+            contentPanel.myHeader(traveler.getStringColumn("username"),this);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        JPanel panelContent = new JPanel();
 		panelContent.setLayout(null);
 		panelContent.setBounds(1, 12, 987, 658);
 		frame.getContentPane().add(panelContent);
@@ -307,7 +347,7 @@ public class TravelerGui {
 
 	}
 
-    private void settingsWindow() throws SQLException {
+    public void settingsWindow() throws SQLException {
 
 		frame = new JFrame();
 		frame.setBounds(startW, startH, 1000, 700);
@@ -518,7 +558,7 @@ public class TravelerGui {
 
 	}
 
-    private void profileWindow() {
+    public void profileWindow() {
         frame = new JFrame();
         frame.setBounds(startW, startH, 1000, 700);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -712,17 +752,19 @@ public class TravelerGui {
 
     }
 
-	private void feedWindow() throws SQLException, IOException {
+	public void feedWindow() throws SQLException, IOException {
 		frame = new JFrame();
 		frame.setBounds(startW, startH, 1000, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.getContentPane().setLayout(null);
 
-		myHeader();
+       /* BackgroundPanel contentPanel= new BackgroundPanel(backgroundimg, 1000, 700);
+        contentPanel.setBounds(0,0, 1000, 700);
+        frame.getContentPane().add(contentPanel);
+        contentPanel.setLayout(null);*/
 
-		Color c = new Color(255, 255, 255);
-		c = transparentColor(c, 190);
+		myHeader();
 
 		Review r = new Review(traveler.con);
 		r.getReviews('>', -1);
@@ -762,6 +804,56 @@ public class TravelerGui {
 		frame.getContentPane().add(jp);
 
 	}
+
+    public void seeTransportsWindow() throws SQLException {
+
+        frame = new JFrame();
+        frame.setBounds(100, 100, 1000, 700);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // frame.getContentPane().setLayout(new BorderLayout());
+        frame.getContentPane().setLayout(null);
+        frame.setVisible(true);
+
+        BackgroundPanel contentPanel= new BackgroundPanel(backgroundimg, 1000, 700);
+        contentPanel.setBounds(0,0, 1000, 700);
+        frame.getContentPane().add(contentPanel);
+        contentPanel.setLayout(null);
+
+        contentPanel.myHeader(traveler.getStringColumn("username"),this);
+
+       // myHeader();
+
+        AddElement transports = null;
+        try {
+            transports = new AddElement(0,1,1,1,1000,460,90,90);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        transports.setOpaque(false);
+        Statement mystate = null;
+        try {
+            mystate = con.createStatement();
+
+            String query = "SELECT * FROM transport";
+            ResultSet myRS = mystate.executeQuery(query);
+            while (myRS.next()) {
+                TransportGui transportGui = new TransportGui(con, myRS.getInt("id"));
+                transports.addNew(transportGui);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                if(mystate != null) mystate.close();
+            }catch(Exception e)
+            {
+                System.out.println(">Error: " + e);
+            }
+        }
+        contentPanel.add(transports);
+
+    }
 
 	private void chatWindow() throws SQLException {
 
