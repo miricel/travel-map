@@ -1,10 +1,8 @@
 package User.Traveller;
 import Component.BackgroundList;
 import Component.BackgroundPanel;
-import Essentials.TransportGui;
+import Essentials.*;
 import User.Utility;
-import Essentials.Review;
-import Essentials.ReviewGui;
 import Component.AddElement;
 import User.Utility;
 import Component.myRowJPanel;
@@ -225,7 +223,7 @@ public class TravelerGui {
 			}
 		});
 
-		JButton btnNewButton_5 = new JButton("Find tickets");
+		JButton btnNewButton_5 = new JButton("My tickets");
 		btnNewButton_5.setContentAreaFilled(false);
 		btnNewButton_5.setBorderPainted(false);;
 		btnNewButton_5.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
@@ -235,7 +233,12 @@ public class TravelerGui {
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				frame.setVisible(false);
-			}
+                try {
+                    ticketsWindow();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
 		});
 
 		JButton btnNewButton_6 = new JButton("Settings");
@@ -750,6 +753,50 @@ public class TravelerGui {
 
     }
 
+    public void ticketsWindow() throws SQLException {
+
+        frame = new JFrame();
+        frame.setBounds(100, 100, 1000, 700);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setLayout(null);
+        frame.setVisible(true);
+
+        BackgroundPanel contentPanel= new BackgroundPanel(backgroundimg, 1000, 700);
+        contentPanel.setBounds(0,0, 1000, 700);
+        frame.getContentPane().add(contentPanel);
+        contentPanel.setLayout(null);
+
+        contentPanel.myHeader(traveler.getStringColumn("username"),this);
+
+
+        AddElement tickets = new AddElement(1,0,1,1,1000,450,35,50, 110);
+        tickets.setOpaque(false);
+
+        Statement mystate = null;
+        try {
+            mystate = con.createStatement();
+
+            String query = "SELECT * FROM tickets where travelers_id = "+ traveler.id;
+            ResultSet myRS = mystate.executeQuery(query);
+            while (myRS.next()) {
+                TicketGui ticketGui = new TicketGui(con, myRS.getInt("id"));
+                tickets.addNew(ticketGui);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                if(mystate != null) mystate.close();
+            }catch(Exception e)
+            {
+                System.out.println(">Error: " + e);
+            }
+        }
+        contentPanel.add(tickets);
+
+    }
+
 	public void feedWindow() throws SQLException, IOException {
 		frame = new JFrame();
 		frame.setSize(1000, 700);
@@ -757,50 +804,40 @@ public class TravelerGui {
 		frame.setVisible(true);
 		frame.getContentPane().setLayout(null);
 
-       /* BackgroundPanel contentPanel= new BackgroundPanel(backgroundimg, 1000, 700);
+        BackgroundPanel contentPanel= new BackgroundPanel(backgroundimg, 1000, 700);
         contentPanel.setBounds(0,0, 1000, 700);
         frame.getContentPane().add(contentPanel);
-        contentPanel.setLayout(null);*/
+        contentPanel.setLayout(null);
 
-		myHeader();
+        contentPanel.myHeader(traveler.getStringColumn("username"),this);
 
-		Review r = new Review(traveler.con);
-		r.getReviews('>', -1);
+        AddElement review = null;
+        try {
+            review = new AddElement(0,1,1,1,1000,637,0,0, 25);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        review.setOpaque(false);
+        try {
+            Review r = new Review(traveler.con);
+            r.getReviews('>', -1);
 
-		DefaultListModel<ReviewGui> listModel = new DefaultListModel<>();
-		JList<ReviewGui> list = new JList<>(listModel);
-		list.setCellRenderer(new myRowJPanel());
+            while(r.result.next()) {
+                ReviewGui rg = new ReviewGui(frame);
+                rg.id = r.getId();
+                rg.travelerPic = r.getProfilePicTraveler();
+                rg.namesurname = r.getNameSurnameTraveler();
+                rg.title = r.getTitle();
+                rg.content = r.getContent();
+                rg.pic = r.getPic();
+                rg.buildReviewPanel();
+                review.addNew(rg);
+            }
 
-		while(r.result.next()) {
-			ReviewGui rg = new ReviewGui(frame);
-			rg.id = r.getId();
-			rg.travelerPic = r.getProfilePicTraveler();
-			rg.namesurname = r.getNameSurnameTraveler();
-			rg.title = r.getTitle();
-			rg.content = r.getContent();
-			rg.pic = r.getPic();
-			rg.buildReviewPanel();
-			listModel.addElement(rg);
-		}
-
-		JLabel background = new JLabel();
-		background.setBounds(0, 0, 1000, 706);
-		background.setBorder(null);
-		ImageIcon scaled = new ImageIcon(this.getClass().getResource("/transports2.jpg"));
-		scaled = resizedImage(background.getWidth(), background.getHeight(), scaled);
-		background.setIcon(scaled);
-
-
-		list.setOpaque(false);
-		JScrollPane jp = new JScrollPane(list);
-		jp.setBounds(0, 27, 1001, 645);
-		jp.setOpaque(false);
-		list.setVisibleRowCount(2);
-		list.setLayout(null);
-		list.setFixedCellWidth(40);
-		list.setFixedCellHeight(310);
-		frame.getContentPane().add(jp);
-
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        contentPanel.add(review);
 	}
 
     public void seeTransportsWindow() throws SQLException {
@@ -812,7 +849,7 @@ public class TravelerGui {
         frame.getContentPane().setLayout(null);
         frame.setVisible(true);
 
-        BackgroundPanel contentPanel= new BackgroundPanel(backgroundimg, 1000, 700);
+        BackgroundPanel contentPanel = new BackgroundPanel(backgroundimg, 1000, 700);
         contentPanel.setBounds(0,0, 1000, 700);
         frame.getContentPane().add(contentPanel);
         contentPanel.setLayout(null);
@@ -823,7 +860,7 @@ public class TravelerGui {
 
         AddElement transports = null;
         try {
-            transports = new AddElement(0,1,1,1,1000,460,90,90);
+            transports = new AddElement(0,1,1,1,1000,460,90,90, 110);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -835,7 +872,7 @@ public class TravelerGui {
             String query = "SELECT * FROM transport";
             ResultSet myRS = mystate.executeQuery(query);
             while (myRS.next()) {
-                TransportGui transportGui = new TransportGui(con, myRS.getInt("id"));
+                TransportTravelerGui transportGui = new TransportTravelerGui(con, myRS.getInt("id"), traveler.id);
                 transports.addNew(transportGui);
             }
 

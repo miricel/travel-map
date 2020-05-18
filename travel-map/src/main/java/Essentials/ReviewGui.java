@@ -1,8 +1,6 @@
 package Essentials;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -14,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
 
 public class ReviewGui extends JPanel {
 
@@ -47,17 +46,17 @@ public class ReviewGui extends JPanel {
 
     public void buildReviewPanel() {
 
-        JPanel mainPanel = new JPanel();
         Color c = new Color(255, 255, 255);
         c = transparentColor(c, 190);
-        this.setSize(1000, 500);
+        this.setPreferredSize(new Dimension(600, 330));
         this.setOpaque(false);
         this.setLayout(null);
+        this.setBorder(null);
 
         JPanel panel = new JPanel();
         panel.setLayout(null);
         panel.setBackground(new Color(255, 255, 255));
-        panel.setBounds(150, 18, 300, 40);
+        panel.setBounds(130, 20, 300, 40);
         panel.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
         this.add(panel);
 
@@ -82,7 +81,7 @@ public class ReviewGui extends JPanel {
         JPanel p = new JPanel();
         p.setBackground(c);
         p.setLayout(null);
-        p.setBounds(100, 38, 750, 270);
+        p.setBounds(90, 35, 750, 270);
         this.add(p);
 
         JLabel label = new JLabel();

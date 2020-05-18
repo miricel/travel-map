@@ -24,7 +24,7 @@ public class AddElement extends JPanel {
     private int height;
     private int width;
 
-    public AddElement(int a,int b,int c,int d, int width, int height, int l,int r) throws SQLException {
+    public AddElement(int a,int b,int c,int d, int width, int height, int l,int r, int u) throws SQLException {
         // outerPanel is a wrapper or container JPanel that is
         // held by JScrollPane's viewport that holds the rowHolderPanel in
         // a BorderLayout.PAGE_START location, so the rows don't expand unnecessarily
@@ -41,7 +41,7 @@ public class AddElement extends JPanel {
         JScrollBar bar = scroll.getHorizontalScrollBar();
         outerPanel.setOpaque(false);
         bar.setOpaque(false);
-        setBounds(0,110,width,height+10);
+        setBounds(0,u,width,height+10);
         scroll.setBorder(new EmptyBorder(0,l,0,r));
         //  Color color = new Color(225, 100, 225);
         // color = transparentColor(color, 100);

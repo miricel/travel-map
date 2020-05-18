@@ -20,7 +20,6 @@ public class BackgroundPanel extends JPanel {
     private final int width;
     private final int height;
     private BufferedImage background;
-    private int index;
 
     public BackgroundPanel(String image, int width, int height) {
 
@@ -50,15 +49,20 @@ public class BackgroundPanel extends JPanel {
 
     public void myHeader(String username, final TravelerGui travelerGui) {
 
-        index = 0;
+        JPanel panel = new JPanel();
+        panel.setBounds(0, 0, width, height);
+        panel.setOpaque(false);
+        panel.setLayout(null);
+        final int[] index = {0};
         Color color = new Color(0, 0, 0);
         color = transparentColor(color, 200);
+        int h = 40;
 
         JPanel myHeader = new JPanel();
         myHeader.setBounds(0, 0, 1000, 261);
         myHeader.setLayout(null);
         myHeader.setOpaque(false);
-        travelerGui.frame.getContentPane().add(myHeader);
+        panel.add(myHeader);
 
         JPanel panelHeader = new JPanel();
         panelHeader.setLayout(null);
@@ -110,7 +114,6 @@ public class BackgroundPanel extends JPanel {
         lblNewLabel_4.setIcon(search);
         lblNewLabel_4.setBounds(487, 0, 25, 27);
         panelHeader.add(lblNewLabel_4);
-
 
         JPanel panelMenu = new JPanel();
         panelMenu.setLayout(null);
@@ -186,7 +189,8 @@ public class BackgroundPanel extends JPanel {
             }
         });
 
-        JButton btnNewButton_5 = new JButton("Find tickets");
+
+        JButton btnNewButton_5 = new JButton("My tickets");
         btnNewButton_5.setContentAreaFilled(false);
         btnNewButton_5.setBorderPainted(false);;
         btnNewButton_5.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
@@ -196,6 +200,11 @@ public class BackgroundPanel extends JPanel {
         btnNewButton_5.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 travelerGui.frame.setVisible(false);
+                try {
+                    travelerGui.ticketsWindow();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -233,13 +242,14 @@ public class BackgroundPanel extends JPanel {
 
         btnMenu.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                index++;
-                if(index%2 == 0)
+                index[0]++;
+                if (index[0] % 2 == 0)
                     panelMenu.setVisible(false);
                 else panelMenu.setVisible(true);
             }
         });
 
+        add(panel);
     }
 
     public void myHeader(String username, final AgencyGui agencyGui) {
