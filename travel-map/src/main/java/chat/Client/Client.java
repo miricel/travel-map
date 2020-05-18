@@ -3,6 +3,8 @@ package chat.Client;
 import com.mysql.jdbc.PreparedStatement;
 
 import org.apache.commons.lang3.StringUtils;
+
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -68,7 +70,7 @@ public class Client {
     public void msg(String dest, String text) throws SQLException {
         String cmd = "msg "+ dest + " " + text;
         Statement mystate = con.createStatement();
-        int conv;
+        int conv = 0;
         String query = "SELECT id FROM conversation WHERE ((user1 = '"+username+"' AND user2 = '"+dest+"') " +
                 "OR (user1 = '"+dest+"' AND user2 = '"+username+"'))";
         ResultSet myRS = mystate.executeQuery(query);
@@ -84,7 +86,12 @@ public class Client {
             ResultSet rs = preparedStm.getGeneratedKeys();
             if(rs.next())
                 conv = rs.getInt("id");
-            else throw new SQLException();
+            else try {
+                throw new SQLException();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Can't connect to database!");
+            }
             preparedStm.close();
         }
 
@@ -120,7 +127,9 @@ public class Client {
 
             return true;
         } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Can't connect to server!");
             e.printStackTrace();
+
         }
         return false;
     }

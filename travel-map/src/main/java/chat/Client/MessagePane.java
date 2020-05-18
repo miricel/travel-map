@@ -48,6 +48,7 @@ public class MessagePane extends JFrame implements MessageListener {
                 inputField.setText("");
                 JPanel panel= sentMessage(text);
                 listModel.addElement(panel);
+                messageList.ensureIndexIsVisible(listModel.indexOf(listModel.lastElement()));
             }
         });
 
@@ -84,6 +85,7 @@ public class MessagePane extends JFrame implements MessageListener {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Can't connect to database!");
         }finally{
             try {
                 if(mystate != null) mystate.close();
@@ -166,10 +168,9 @@ public class MessagePane extends JFrame implements MessageListener {
         myRowJPanel row = new myRowJPanel();
         messageList.setCellRenderer(row);
         messageList.setOpaque(false);
+        messageList.ensureIndexIsVisible(listModel.indexOf(listModel.lastElement()));
         JScrollPane scroll = new JScrollPane(messageList);
         scroll.setBounds(0,27,400,380);
-        //  Color color = new Color(225, 100, 225);
-        // color = transparentColor(color, 100);
         scroll.setOpaque(false);
         scroll.getViewport().setOpaque(false);
 
@@ -229,6 +230,7 @@ public class MessagePane extends JFrame implements MessageListener {
           //  String line = from + ": " + text;
             JPanel panel = recivedMessage(text);
             listModel.addElement(panel);
+            messageList.ensureIndexIsVisible(listModel.indexOf(listModel.lastElement()));
         }
     }
 }

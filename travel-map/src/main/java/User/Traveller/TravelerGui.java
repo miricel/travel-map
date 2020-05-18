@@ -256,7 +256,6 @@ public class TravelerGui {
 
 	}
 
-
 	private void homePageWindow() {
 		
 		frame = new JFrame();

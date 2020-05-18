@@ -22,7 +22,11 @@ public class ConnectChatWindow {
 
         this.con =con;
         this.client = new Client("localhost",8818,con);
-        client.connect();
+        if( !client.connect()) {
+            System.err.println("Connect failed");
+            return;
+        }
+
 
         frame.setBounds(100, 100, 450, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

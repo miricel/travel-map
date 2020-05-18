@@ -3,6 +3,7 @@ package chat.Server;
 import com.mysql.jdbc.Connection;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -172,7 +173,13 @@ public class ServerWorker extends Thread {
         if( myRS.next()) {
             this.userid = myRS.getInt("id");
             return true;
-        } else throw new SQLException();
+        } else try {
+            throw new SQLException();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,"Invalid username/password");
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private void handleLogin(PrintWriter printOutput, String[] tokens) throws IOException, SQLException {

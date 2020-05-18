@@ -149,6 +149,17 @@ public class BackgroundPanel extends JPanel {
         btnNewButton_4.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
         btnNewButton_4.setBounds(2, 81, 137, 27);
         panelMenu.add(btnNewButton_4);
+        btnNewButton_4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+            agencyGui.getFrame().setVisible(false);
+            try {
+                agencyGui.seeTransportsWindow();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    });
 
         JButton btnNewButton_6 = new JButton("Settings");
         btnNewButton_6.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
