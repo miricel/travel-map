@@ -1,8 +1,12 @@
 package User.Traveller;
 import Component.BackgroundPanel;
+import User.Utility;
 import Essentials.Review;
+import Essentials.ReviewGui;
 import User.Utility;
 import Component.myRowJPanel;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -34,7 +38,7 @@ import javax.swing.UIManager;
 
 public class TravelerGui {
 
-    public class userButton extends JButton {
+    public static class userButton extends JButton {
         public int id;
 
         public userButton(int id) {
@@ -311,7 +315,7 @@ public class TravelerGui {
 
 	}
 
-	private void settingsWindow() throws SQLException {
+    private void settingsWindow() throws SQLException {
 
 		frame = new JFrame();
 		frame.setBounds(startW, startH, 1000, 700);
@@ -321,204 +325,204 @@ public class TravelerGui {
 
 		myHeader();
 
-		JTextPane []change = new JTextPane[5];
+        JTextPane []change = new JTextPane[5];
 
-		ImageIcon set = new ImageIcon(this.getClass().getResource("/setting.png"));
-		set = resizedImage(20, 20, set);
+        ImageIcon set = new ImageIcon(this.getClass().getResource("/setting.png"));
+        set = resizedImage(20, 20, set);
 
-		JLabel label = new JLabel();
-		label.setBorder(new LineBorder(new Color(0, 0, 0), 2));
-		label.setBounds(45, 83, 150, 150);
-		try {
-			ImageIcon image = traveler.getProfilePicture();
-			image = resizedImage(label.getWidth(), label.getHeight(), image);
-			label.setIcon(image);
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		frame.getContentPane().add(label);
+        JLabel label = new JLabel();
+        label.setBorder(new LineBorder(new Color(0, 0, 0), 2));
+        label.setBounds(45, 83, 150, 150);
+        try {
+            ImageIcon image = traveler.getProfilePicture();
+            image = resizedImage(label.getWidth(), label.getHeight(), image);
+            label.setIcon(image);
+        } catch (SQLException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        frame.getContentPane().add(label);
 
-		JButton btnUploadPic = new JButton("Upload profile pic");
-		btnUploadPic.setForeground(new Color(255, 255, 255));
-		btnUploadPic.setBackground(Color.DARK_GRAY);
-		btnUploadPic.setFont(new Font("Liberation Sans", Font.BOLD, 12));
-		btnUploadPic.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser chooser = new JFileChooser();
-				chooser.showOpenDialog(null);
-				File f = chooser.getSelectedFile();
-				String path = f.getAbsolutePath();
-				try {
-					traveler.uploadPic(path);
-				} catch (FileNotFoundException | SQLException e) {
-					e.printStackTrace();
-				}
-				try {
-					ImageIcon image = resizedImage(label.getHeight(), label.getWidth(), traveler.getProfilePicture());
-					label.setIcon(image);
-				} catch (SQLException | IOException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		btnUploadPic.setBounds(45, 265, 150, 35);
-		frame.getContentPane().add(btnUploadPic);
+        JButton btnUploadPic = new JButton("Upload profile pic");
+        btnUploadPic.setForeground(new Color(255, 255, 255));
+        btnUploadPic.setBackground(Color.DARK_GRAY);
+        btnUploadPic.setFont(new Font("Liberation Sans", Font.BOLD, 12));
+        btnUploadPic.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                JFileChooser chooser = new JFileChooser();
+                chooser.showOpenDialog(null);
+                File f = chooser.getSelectedFile();
+                String path = f.getAbsolutePath();
+                try {
+                    traveler.uploadPic(path);
+                } catch (FileNotFoundException | SQLException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    ImageIcon image = resizedImage(label.getHeight(), label.getWidth(), traveler.getProfilePicture());
+                    label.setIcon(image);
+                } catch (SQLException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        btnUploadPic.setBounds(45, 265, 150, 35);
+        frame.getContentPane().add(btnUploadPic);
 
-		JLabel lblNewLabel = new JLabel("Userame");
-		lblNewLabel.setFont(new Font("Liberation Sans", Font.BOLD, 16));
-		lblNewLabel.setBounds(322, 95, 393, 15);
-		frame.getContentPane().add(lblNewLabel);
+        JLabel lblNewLabel = new JLabel("Userame");
+        lblNewLabel.setFont(new Font("Liberation Sans", Font.BOLD, 16));
+        lblNewLabel.setBounds(322, 95, 393, 15);
+        frame.getContentPane().add(lblNewLabel);
 
-		JLabel lblMyname = new JLabel(traveler.getStringColumn("username"));
-		lblMyname.setFont(new Font("Liberation Sans", Font.PLAIN, 15));
-		lblMyname.setBounds(322, 130, 170, 15);
-		frame.getContentPane().add(lblMyname);
+        JLabel lblMyname = new JLabel(traveler.getStringColumn("username"));
+        lblMyname.setFont(new Font("Liberation Sans", Font.PLAIN, 15));
+        lblMyname.setBounds(322, 130, 170, 15);
+        frame.getContentPane().add(lblMyname);
 
-		JLabel lblNewLabel_1 = new JLabel("Password");
-		lblNewLabel_1.setFont(new Font("Liberation Sans", Font.BOLD, 16));
-		lblNewLabel_1.setBounds(322, 195, 170, 15);
-		frame.getContentPane().add(lblNewLabel_1);
+        JLabel lblNewLabel_1 = new JLabel("Password");
+        lblNewLabel_1.setFont(new Font("Liberation Sans", Font.BOLD, 16));
+        lblNewLabel_1.setBounds(322, 195, 170, 15);
+        frame.getContentPane().add(lblNewLabel_1);
 
-		JLabel lblMysurname = new JLabel("********");
-		lblMysurname.setFont(new Font("Liberation Sans", Font.PLAIN, 15));
-		lblMysurname.setBounds(322, 230, 170, 15);
-		frame.getContentPane().add(lblMysurname);
+        JLabel lblMysurname = new JLabel("********");
+        lblMysurname.setFont(new Font("Liberation Sans", Font.PLAIN, 15));
+        lblMysurname.setBounds(322, 230, 170, 15);
+        frame.getContentPane().add(lblMysurname);
 
-		JLabel lblUsername = new JLabel("Name");
-		lblUsername.setFont(new Font("Liberation Sans", Font.BOLD, 16));
-		lblUsername.setBounds(322, 295, 170, 15);
-		frame.getContentPane().add(lblUsername);
+        JLabel lblUsername = new JLabel("Name");
+        lblUsername.setFont(new Font("Liberation Sans", Font.BOLD, 16));
+        lblUsername.setBounds(322, 295, 170, 15);
+        frame.getContentPane().add(lblUsername);
 
-		JLabel lblNewLabel_2 = new JLabel(traveler.getStringColumn("name"));
-		lblNewLabel_2.setFont(new Font("Liberation Sans", Font.PLAIN, 15));
-		lblNewLabel_2.setBounds(322, 330, 170, 15);
-		frame.getContentPane().add(lblNewLabel_2);
+        JLabel lblNewLabel_2 = new JLabel(traveler.getStringColumn("name"));
+        lblNewLabel_2.setFont(new Font("Liberation Sans", Font.PLAIN, 15));
+        lblNewLabel_2.setBounds(322, 330, 170, 15);
+        frame.getContentPane().add(lblNewLabel_2);
 
-		JLabel lblPassword = new JLabel("Surname");
-		lblPassword.setFont(new Font("Liberation Sans", Font.BOLD, 16));
-		lblPassword.setBounds(322, 395, 170, 15);
-		frame.getContentPane().add(lblPassword);
+        JLabel lblPassword = new JLabel("Surname");
+        lblPassword.setFont(new Font("Liberation Sans", Font.BOLD, 16));
+        lblPassword.setBounds(322, 395, 170, 15);
+        frame.getContentPane().add(lblPassword);
 
-		JLabel label_1 = new JLabel(traveler.getStringColumn("surname"));
-		label_1.setFont(new Font("Liberation Sans", Font.PLAIN, 15));
-		label_1.setBounds(322, 430, 170, 15);
-		frame.getContentPane().add(label_1);
+        JLabel label_1 = new JLabel(traveler.getStringColumn("surname"));
+        label_1.setFont(new Font("Liberation Sans", Font.PLAIN, 15));
+        label_1.setBounds(322, 430, 170, 15);
+        frame.getContentPane().add(label_1);
 
-		JLabel lblNewLabel_3 = new JLabel("Default departure city");
-		lblNewLabel_3.setFont(new Font("Liberation Sans", Font.BOLD, 16));
-		lblNewLabel_3.setBounds(322, 495, 170, 15);
-		frame.getContentPane().add(lblNewLabel_3);
+        JLabel lblNewLabel_3 = new JLabel("Default departure city");
+        lblNewLabel_3.setFont(new Font("Liberation Sans", Font.BOLD, 16));
+        lblNewLabel_3.setBounds(322, 495, 170, 15);
+        frame.getContentPane().add(lblNewLabel_3);
 
-		JLabel lblMycity = new JLabel(traveler.getStringColumn("departureCity"));
-		lblMycity.setFont(new Font("Liberation Sans", Font.PLAIN, 15));
-		lblMycity.setBounds(322, 530, 170, 15);
-		frame.getContentPane().add(lblMycity);
+        JLabel lblMycity = new JLabel(traveler.getStringColumn("departureCity"));
+        lblMycity.setFont(new Font("Liberation Sans", Font.PLAIN, 15));
+        lblMycity.setBounds(322, 530, 170, 15);
+        frame.getContentPane().add(lblMycity);
 
-		JButton []btn = new JButton[5];
-		int []isPressed = new int[5];
-		for(int k = 0, j = 120; k < 5; k++, j = j + 100) {
-			final int i = k;
-			btn[i]= new JButton();
-			btn[i].setBounds(800, j, 60, 25);
-			btn[i].setIcon(set);
-			btn[i].setContentAreaFilled(false);
-			btn[i].setBorder(null);
-			btn[i].addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					if(isPressed[i]%2 == 0) {
-						change[i].setText(null);
-						change[i].setVisible(true);
-						change[i].setOpaque(true);
-					}
-					else change[i].setVisible(false);
+        JButton []btn = new JButton[5];
+        int []isPressed = new int[5];
+        for(int k = 0, j = 120; k < 5; k++, j = j + 100) {
+            final int i = k;
+            btn[i]= new JButton();
+            btn[i].setBounds(800, j, 60, 25);
+            btn[i].setIcon(set);
+            btn[i].setContentAreaFilled(false);
+            btn[i].setBorder(null);
+            btn[i].addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent arg0) {
+                    if(isPressed[i]%2 == 0) {
+                        change[i].setText(null);
+                        change[i].setVisible(true);
+                        change[i].setOpaque(true);
+                    }
+                    else change[i].setVisible(false);
 
-					isPressed[i]++;
-				}
-			});
-			frame.getContentPane().add(btn[i]);
-		}
-		btn[0].setName("username");
-		btn[1].setName("password");
-		btn[2].setName("name");
-		btn[3].setName("surname");
-		btn[4].setName("departureCity");
+                    isPressed[i]++;
+                }
+            });
+            frame.getContentPane().add(btn[i]);
+        }
+        btn[0].setName("username");
+        btn[1].setName("password");
+        btn[2].setName("name");
+        btn[3].setName("surname");
+        btn[4].setName("departureCity");
 
-		JPasswordField textField = new JPasswordField();
-		textField.setBounds(231, 617, 188, 25);
-		frame.getContentPane().add(textField);
-		textField.setColumns(10);
+        JPasswordField textField = new JPasswordField();
+        textField.setBounds(231, 617, 188, 25);
+        frame.getContentPane().add(textField);
+        textField.setColumns(10);
 
-		JLabel lblIntroduceCurrentPasssword = new JLabel("Current passsword");
-		lblIntroduceCurrentPasssword.setFont(new Font("Liberation Sans", Font.BOLD, 15));
-		lblIntroduceCurrentPasssword.setBounds(233, 584, 150, 15);
-		frame.getContentPane().add(lblIntroduceCurrentPasssword);
+        JLabel lblIntroduceCurrentPasssword = new JLabel("Current passsword");
+        lblIntroduceCurrentPasssword.setFont(new Font("Liberation Sans", Font.BOLD, 15));
+        lblIntroduceCurrentPasssword.setBounds(233, 584, 150, 15);
+        frame.getContentPane().add(lblIntroduceCurrentPasssword);
 
-		JButton btnNewButton = new JButton("Save Changes");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				flag = false;
+        JButton btnNewButton = new JButton("Save Changes");
+        btnNewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                flag = false;
 
-				for(int j = 0; j < 5; j++)
-					if(isPressed[j]%2 != 0)
-						try {
-							traveler.setStringColumn(btn[j].getName(), Utility.hashPassword(change[j].getText()));
-						} catch (SQLException e1) {
-							flag = true;
-							JOptionPane.showMessageDialog(null, "Wrong input!");
-							frame.setVisible(false);
-							try {
-								settingsWindow();
-							} catch (SQLException e2) {
-								e2.printStackTrace();
-							}
-							e1.printStackTrace();
-						} catch (NoSuchAlgorithmException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-				if(!flag) {
-					JOptionPane.showMessageDialog(null, "Changes performed!");
-					try {
-						settingsWindow();
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-			}
-		});
-		btnNewButton.setBackground(SystemColor.desktop);
-		btnNewButton.setForeground(new Color(255, 255, 255));
-		btnNewButton.setFont(new Font("Liberation Sans", Font.BOLD, 15));
-		btnNewButton.setBounds(577, 607, 159, 35);
-		frame.getContentPane().add(btnNewButton);
+                try {
+                    if(traveler.isCorrectPassword(Utility.hashPassword(textField.getText())))
+                        for(int j = 0; j < 5; j++)
+                            if(isPressed[j]%2 != 0)
+                                try {
+                                    traveler.setStringColumn(btn[j].getName(), change[j].getText());
+                                } catch (SQLException e1) {
+                                    flag = true;
+                                    JOptionPane.showMessageDialog(null, "This username is already taken!");
+                                    frame.setVisible(false);
+                                    e1.printStackTrace();
+                                }
+                } catch (HeadlessException | NoSuchAlgorithmException | SQLException e2) {
+                    JOptionPane.showMessageDialog(null, "Wrong password!");
+                    flag = true;
+                    frame.setVisible(false);
+                    e2.printStackTrace();
+                }
+                if(!flag) {
+                    JOptionPane.showMessageDialog(null, "Changes performed!");
+                    frame.setVisible(false);
+                }
+                try {
+                    settingsWindow();
+                } catch (SQLException e2) {
+                    e2.printStackTrace();
+                }
+            }
+        });
+        btnNewButton.setBackground(SystemColor.desktop);
+        btnNewButton.setForeground(new Color(255, 255, 255));
+        btnNewButton.setFont(new Font("Liberation Sans", Font.BOLD, 15));
+        btnNewButton.setBounds(577, 607, 159, 35);
+        frame.getContentPane().add(btnNewButton);
 
-		for(int i = 0; i < 5; i++) {
-			change[i]= new JTextPane();
-			change[i].setBounds(322, 125+i*100, 170, 20);
-			change[i].setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-			change[i].setVisible(false);
-			frame.getContentPane().add(change[i]);
-		}
+        for(int i = 0; i < 5; i++) {
+            change[i]= new JTextPane();
+            change[i].setBounds(322, 125+i*100, 170, 20);
+            change[i].setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+            change[i].setVisible(false);
+            frame.getContentPane().add(change[i]);
+        }
 
-		JPanel label_2 = new JPanel();
-		Color c = new Color(255, 255, 255);
-		c = transparentColor(c, 150);
-		label_2.setBackground(c);
-		label_2.setBounds(281, 83, 619, 475);
-		frame.getContentPane().add(label_2);
+        JPanel label_2 = new JPanel();
+        Color c = new Color(255, 255, 255);
+        c = transparentColor(c, 150);
+        label_2.setBackground(c);
+        label_2.setBounds(281, 83, 619, 475);
+        frame.getContentPane().add(label_2);
 
-		JLabel background = new JLabel();
-		background.setBounds(0, 0, 1000, 706);
-		background.setBorder(null);
-		frame.getContentPane().add(background);
-		ImageIcon scaled = new ImageIcon(this.getClass().getResource("/transports2.jpg"));
-		scaled = resizedImage(background.getWidth(), background.getHeight(), scaled);
-		background.setIcon(scaled);
+        JLabel background = new JLabel();
+        background.setBounds(0, 0, 1000, 706);
+        background.setBorder(null);
+        frame.getContentPane().add(background);
+        ImageIcon scaled = new ImageIcon(this.getClass().getResource("/transports2.jpg"));
+        scaled = resizedImage(background.getWidth(), background.getHeight(), scaled);
+        background.setIcon(scaled);
 
 	}
 
@@ -731,103 +735,39 @@ public class TravelerGui {
 		Review r = new Review(traveler.con);
 		r.getReviews('>', -1);
 
-		DefaultListModel<JPanel> listModel = new DefaultListModel<>();
-		JList<JPanel> jPanelJList = new JList<>(listModel);
-
-		int i = 60;
+		DefaultListModel<ReviewGui> listModel = new DefaultListModel<>();
+		JList<ReviewGui> list = new JList<>(listModel);
+		list.setCellRenderer(new myRowJPanel());
 
 		while(r.result.next()) {
-			JPanel mainPanel = new JPanel();
-			mainPanel.setBounds(100, i, 750, 270);
-			mainPanel.setOpaque(false);
-			mainPanel.setLayout(null);
-			frame.getContentPane().add(mainPanel);
-
-			JPanel panel = new JPanel();
-			panel.setLayout(null);
-			panel.setBackground(new Color(255, 255, 255));
-			panel.setBounds(30, 0, 300, 40);
-			panel.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
-			mainPanel.add(panel);
-
-			userButton btnNewButton_8 = new userButton(r.getId());
-			btnNewButton_8.setIcon(resizedImage(25, 25, r.getProfilePicTraveler()));
-			btnNewButton_8.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					frame.setVisible(false);
-					/*try {
-						travelerProfile(btnNewButton_8.id);
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}*/
-				}
-			});
-			btnNewButton_8.setBounds(12, 7, 25, 25);
-			panel.add(btnNewButton_8);
-
-			JLabel lblNewLabel_5 = new JLabel();
-			lblNewLabel_5.setText(r.getNameSurnameTraveler());
-			lblNewLabel_5.setFont(new Font("Liberation Sans", Font.PLAIN, 17));
-			lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel_5.setBounds(42, 10, 169, 15);
-			panel.add(lblNewLabel_5);
-
-			JPanel p = new JPanel();
-			p.setBackground(c);
-			p.setLayout(null);
-			p.setBounds(0, 20, 750, 270);
-			mainPanel.add(p);
-
-			JLabel label = new JLabel();
-			label.setBounds(40, 40, 200, 200);
-			label.setIcon(resizedImage(170, 170, r.getPic()));
-			p.add(label);
-
-			JLabel lblTitle = new JLabel();
-			lblTitle.setText(r.getTitle());
-			lblTitle.setFont(new Font("Liberation Sans", Font.BOLD, 17));
-			lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
-			lblTitle.setBounds(330, 25, 262, 15);
-			p.add(lblTitle);
-
-			JEditorPane content = new JEditorPane();
-			content.setText(r.getContent());
-			content.setOpaque(false);
-			content.setForeground(Color.GRAY);
-			content.setEditable(false);
-			content.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
-			content.setBounds(260, 50, 440, 170);
-			p.add(content);
-
-			listModel.addElement(mainPanel);
-			i = i + 310;
+			ReviewGui rg = new ReviewGui(frame);
+			rg.id = r.getId();
+			rg.travelerPic = r.getProfilePicTraveler();
+			rg.namesurname = r.getNameSurnameTraveler();
+			rg.title = r.getTitle();
+			rg.content = r.getContent();
+			rg.pic = r.getPic();
+			rg.buildReviewPanel();
+			listModel.addElement(rg);
 		}
-
-		r.result.close();
-
-		myRowJPanel row = new myRowJPanel();
-		jPanelJList.setCellRenderer(row);
-		jPanelJList.setOpaque(false);
-		jPanelJList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-		jPanelJList.setVisibleRowCount(1);
-		JScrollPane scroll = new JScrollPane(jPanelJList);
-		scroll.setBounds(0,130,1000,450);
-		scroll.setBorder(new EmptyBorder(0,35,0,35));
-		//  Color color = new Color(225, 100, 225);
-		// color = transparentColor(color, 100);
-		scroll.setOpaque(false);
-		scroll.getViewport().setOpaque(false);
-
-		frame.getContentPane().add(scroll);
 
 		JLabel background = new JLabel();
 		background.setBounds(0, 0, 1000, 706);
 		background.setBorder(null);
-		frame.getContentPane().add(background);
 		ImageIcon scaled = new ImageIcon(this.getClass().getResource("/transports2.jpg"));
 		scaled = resizedImage(background.getWidth(), background.getHeight(), scaled);
 		background.setIcon(scaled);
+
+
+		list.setOpaque(false);
+		JScrollPane jp = new JScrollPane(list);
+		jp.setBounds(0, 27, 1001, 645);
+		jp.setOpaque(false);
+		list.setVisibleRowCount(2);
+		list.setLayout(null);
+		list.setFixedCellWidth(40);
+		list.setFixedCellHeight(310);
+		frame.getContentPane().add(jp);
 
 	}
 
