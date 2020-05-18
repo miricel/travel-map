@@ -50,8 +50,8 @@ public class TravelerGui {
     }
 
     private BufferedImage backgroundimg = resize(ImageIO.read(new File("resources/transports2.jpg")),1000,700);
-    private JFrame frame;
-	private Traveler traveler;
+    public JFrame frame;
+	public Traveler traveler;
 	private int index;
 	private boolean flag = false;
 	private Connection con;
@@ -286,7 +286,7 @@ public class TravelerGui {
 
 	}
 
-	private void homePageWindow() {
+	public void homePageWindow() {
 
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1000, 700);
@@ -294,9 +294,18 @@ public class TravelerGui {
 		frame.getContentPane().setLayout(null);
 		frame.setVisible(true);
 
-		myHeader();
+        BackgroundPanel contentPanel= new BackgroundPanel(backgroundimg, 1000, 700);
+        contentPanel.setBounds(0,0, 1000, 700);
+        frame.getContentPane().add(contentPanel);
+        contentPanel.setLayout(null);
 
-		JPanel panelContent = new JPanel();
+        try {
+            contentPanel.myHeader(traveler.getStringColumn("username"),this);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        JPanel panelContent = new JPanel();
 		panelContent.setLayout(null);
 		panelContent.setBounds(1, 12, 987, 658);
 		frame.getContentPane().add(panelContent);
@@ -336,7 +345,7 @@ public class TravelerGui {
 
 	}
 
-    private void settingsWindow() throws SQLException {
+    public void settingsWindow() throws SQLException {
 
         frame = new JFrame();
         frame.setBounds(100, 100, 1000, 700);
@@ -547,7 +556,7 @@ public class TravelerGui {
 
     }
 
-    private void profileWindow() {
+    public void profileWindow() {
         frame = new JFrame();
         frame.setBounds(100, 100, 1000, 700);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -741,7 +750,7 @@ public class TravelerGui {
 
     }
 
-	private void feedWindow() throws SQLException, IOException {
+	public void feedWindow() throws SQLException, IOException {
 		frame = new JFrame();
 		frame.setSize(1000, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -803,18 +812,18 @@ public class TravelerGui {
         frame.getContentPane().setLayout(null);
         frame.setVisible(true);
 
-
         BackgroundPanel contentPanel= new BackgroundPanel(backgroundimg, 1000, 700);
         contentPanel.setBounds(0,0, 1000, 700);
         frame.getContentPane().add(contentPanel);
         contentPanel.setLayout(null);
 
-        myHeader();
+        contentPanel.myHeader(traveler.getStringColumn("username"),this);
 
+       // myHeader();
 
         AddElement transports = null;
         try {
-            transports = new AddElement(0,1,1,1,1000,740,90,110);
+            transports = new AddElement(0,1,1,1,1000,460,90,90);
         } catch (SQLException e) {
             e.printStackTrace();
         }

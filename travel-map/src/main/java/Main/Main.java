@@ -15,8 +15,8 @@ public class Main {
 			public void run() {
 				try {
 					
-					url = "jdbc:mysql://localhost:3306/travel-map";
-					con = (Connection) DriverManager.getConnection(url, "root", "TravelMap");
+					url = "jdbc:mysql://localhost:3306/BookingApp";
+					con = (Connection) DriverManager.getConnection(url, "denisa", "denisa");
 					GuestGui window = new GuestGui(con);
 					
 				} catch (Exception e) {

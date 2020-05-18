@@ -543,7 +543,6 @@ public class AgencyGui {
 
     public void seeTransportsWindow() throws SQLException {
 
-
         frame = new JFrame();
         frame.setBounds(startW, startH, width, height);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
