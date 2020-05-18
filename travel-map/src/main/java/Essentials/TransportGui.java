@@ -189,7 +189,7 @@ public class TransportGui extends JPanel {
         panel.setOpaque(false);
         panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
         panel.setPreferredSize(new Dimension(height+20, height));
-        panel.setBorder(new EmptyBorder(15,30,0,27));
+        panel.setBorder(new EmptyBorder(15,30,0,30));
 
         String transportphoto = transportData.getString("type");
         String transportMean;
