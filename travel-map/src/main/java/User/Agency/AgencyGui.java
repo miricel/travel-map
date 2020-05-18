@@ -3,6 +3,7 @@ package User.Agency;
 import Essentials.TicketGui;
 import Essentials.Transport;
 import Essentials.TransportGui;
+import User.Utility;
 import com.mysql.jdbc.Connection;
 
 
@@ -13,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -23,6 +25,7 @@ import Component.BackgroundPanel;
 import chat.Client.ConnectChatWindow;
 
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 
 
@@ -37,6 +40,7 @@ public class AgencyGui {
     private BufferedImage backgroundimg = resize(ImageIO.read(new File("resources/transports2.jpg")),width,width);
     private int startW = 350;
     private int startH = 150;
+    private boolean flag = false;
 
     public AgencyGui(Connection con, int id) throws SQLException, IOException {
         this.con = con;
@@ -292,16 +296,11 @@ public class AgencyGui {
 
         contentPanel.myHeader(agency.getStringColumn("username"),this);
 
-        ImageIcon set = new ImageIcon(this.getClass().getResource("/setting.png"));
-        set = resizedImage(17, 17, set);
+        JTextPane []change = new JTextPane[5];
 
-        final JPanel[] panel = new JPanel[5];
-        JTextPane[] textPane = new JTextPane[5];
-		/*panel[0].setName("Username");
-		panel[1].setName("Password");
-		panel[2].setName("Name");
-		panel[3].setName("Surname");
-		*/
+        ImageIcon set = new ImageIcon(this.getClass().getResource("/setting.png"));
+        set = resizedImage(21, 21, set);
+
         final JLabel[] photolabel = {new JLabel()};
         final int[] correctheight = {200};
         try {
@@ -356,95 +355,169 @@ public class AgencyGui {
         btnUploadPic.setPreferredSize(new Dimension(150,40));
 
         JPanel photoPanel = new JPanel();
-        photoPanel.setBounds(86,130,210,300);
+        photoPanel.setBounds(100,176,210,300);
         photoPanel.setOpaque(false);
         photoPanel.add(photolabel[0]);
         photoPanel.add(btnUploadPic);
         contentPanel.add(photoPanel);
 
+        int x = 490;
+        int plus = 30;
+        int pl = 10;
+        int y = 125;
+
         JLabel lblNewLabel = new JLabel("Name");
         lblNewLabel.setFont(new Font("Liberation Sans", Font.BOLD, 20));
-        lblNewLabel.setBounds(490, 125, 200, 30);
+        lblNewLabel.setBounds(x, y, 200, 30);
         contentPanel.add(lblNewLabel);
+        y+=plus;
 
         JLabel lblMyname = new JLabel(agency.getStringColumn("name"));
         lblMyname.setFont(new Font("Liberation Sans", Font.PLAIN, 17));
-        lblMyname.setBounds(490, 155, 200, 30);
+        lblMyname.setBounds(x, y, 200, 30);
         contentPanel.add(lblMyname);
+        y+=plus+pl;
+
+        JLabel lbluserrname = new JLabel("Username");
+        lbluserrname.setFont(new Font("Liberation Sans", Font.BOLD, 20));
+        lbluserrname.setBounds(x, y, 200, 30);
+        contentPanel.add(lbluserrname);
+        y+=plus;
+
+        JLabel lblmysurname = new JLabel(agency.getStringColumn("username"));
+        lblmysurname.setFont(new Font("Liberation Sans", Font.PLAIN, 17));
+        lblmysurname.setBounds(x, y, 200, 30);
+        contentPanel.add(lblmysurname);
+        y+=plus+pl;
 
         JLabel lblNewLabel_1 = new JLabel("Password");
         lblNewLabel_1.setFont(new Font("Liberation Sans", Font.BOLD, 20));
-        lblNewLabel_1.setBounds(490, 205, 200, 30);
+        lblNewLabel_1.setBounds(x, y, 200, 30);
         contentPanel.add(lblNewLabel_1);
+        y+=plus;
 
         JLabel lblMysurname = new JLabel("********");
         lblMysurname.setFont(new Font("Liberation Sans", Font.PLAIN, 17));
-        lblMysurname.setBounds(490, 235, 200, 30);
+        lblMysurname.setBounds(x, y, 200, 30);
         contentPanel.add(lblMysurname);
+        y+=plus+pl;
 
         JLabel lblUsername = new JLabel("Country");
         lblUsername.setFont(new Font("Liberation Sans", Font.BOLD, 20));
-        lblUsername.setBounds(490, 285, 200, 30);
+        lblUsername.setBounds(x, y, 200, 30);
         contentPanel.add(lblUsername);
+        y+=plus;
 
         JLabel lblNewLabel_2 = new JLabel(agency.getStringColumn("country"));
         lblNewLabel_2.setFont(new Font("Liberation Sans", Font.PLAIN, 17));
-        lblNewLabel_2.setBounds(490, 315, 200, 30);
+        lblNewLabel_2.setBounds(x, y, 200, 30);
         contentPanel.add(lblNewLabel_2);
+        y+=plus+pl;
 
         JLabel lblNewLabel_3 = new JLabel("Instagram account");
         lblNewLabel_3.setFont(new Font("Liberation Sans", Font.BOLD, 20));
-        lblNewLabel_3.setBounds(490, 365, 200, 30);
+        lblNewLabel_3.setBounds(x, y, 200, 30);
         contentPanel.add(lblNewLabel_3);
+        y+=plus;
 
         JLabel lblCountry = new JLabel("@"+agency.getStringColumn("insta"));
         lblCountry.setFont(new Font("Liberation Sans", Font.PLAIN, 17));
-        lblCountry.setBounds(490, 395, 200, 30);
+        lblCountry.setBounds(x, y, 200, 30);
         contentPanel.add(lblCountry);
+        y+=plus;
 
         final JButton[] btn = new JButton[5];
         final int[] isPressed = new int[5];
-        for (int k = 0, j = 127; k < 4; k++, j = j + 80) {
+        for (int k = 0, j = 127; k < 5; k++, j = j + 80) {
             final int i = k;
             btn[i] = new JButton();
-            btn[i].setBounds(815, j, 30, 30);
+            btn[i].setBounds(850, j, 30, 30);
             btn[i].setIcon(set);
             btn[i].setContentAreaFilled(false);
             btn[i].setBorder(null);
             btn[i].addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent arg0) {
                     if (isPressed[i] % 2 == 0) {
-                        panel[i].setVisible(true);
+                        change[i].setText(null);
+                        change[i].setVisible(true);
+                        change[i].setOpaque(true);
                     }
-
+                    else change[i].setVisible(false);
                     isPressed[i]++;
                 }
             });
             contentPanel.add(btn[i]);
         }
-        btn[0].setName("username");
-        btn[1].setName("password");
-        btn[2].setName("name");
-        btn[3].setName("surname");
+        btn[0].setName("name");
+        btn[1].setName("username");
+        btn[2].setName("password");
+        btn[3].setName("country");
+        btn[4].setName("insta");
+
+        JPasswordField textField = new JPasswordField();
+        textField.setBounds(300, 560, 190, 25);
+        contentPanel.add(textField);
+        textField.setColumns(10);
+
+        JLabel lblIntroduceCurrentPasssword = new JLabel("Current passsword");
+        lblIntroduceCurrentPasssword.setFont(new Font("Liberation Sans", Font.BOLD, 15));
+        lblIntroduceCurrentPasssword.setBounds(303, 539, 150, 20);
+        contentPanel.add(lblIntroduceCurrentPasssword);
 
         JButton btnNewButton = new JButton("Save Changes");
         btnNewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                for (int j = 0; j < 5; j++)
-                    if (isPressed[j] % 2 != 0)
-                        try {
-                            agency.setStringColumn(btn[j].getName(), "laal");
-                        } catch (SQLException e1) {
-                            // TODO Auto-generated catch block
-                            e1.printStackTrace();
-                        }
+                flag = false;
+
+                try {
+                    if(agency.isCorrectPassword(Utility.hashPassword(textField.getText())))
+                        for(int j = 0; j < 5; j++)
+                            if(isPressed[j]%2 != 0)
+                                try {
+                                    agency.setStringColumn(btn[j].getName(), change[j].getText());
+                                } catch (SQLException e1) {
+                                    flag = true;
+                                    JOptionPane.showMessageDialog(null, "This username is already taken!");
+                                    frame.setVisible(false);
+                                    e1.printStackTrace();
+                                }
+                } catch (HeadlessException | NoSuchAlgorithmException | SQLException e2) {
+                    JOptionPane.showMessageDialog(null, "Wrong password!");
+                    flag = true;
+                    frame.setVisible(false);
+                    e2.printStackTrace();
+                }
+                if(!flag) {
+                    JOptionPane.showMessageDialog(null, "Changes performed!");
+                    frame.setVisible(false);
+                }
+                try {
+                    settingsWindow();
+                } catch (SQLException e2) {
+                    e2.printStackTrace();
+                }
             }
         });
         btnNewButton.setBackground(SystemColor.desktop);
         btnNewButton.setForeground(new Color(255, 255, 255));
         btnNewButton.setFont(new Font("Liberation Sans", Font.BOLD, 15));
-        btnNewButton.setBounds(425, 544, 150, 40);
+        btnNewButton.setBounds(520, 535, 170, 50);
         contentPanel.add(btnNewButton);
+
+        for(int i = 0; i < 5; i++) {
+            change[i]= new JTextPane();
+            change[i].setBounds(x, 155+i*(70), 170, 25);
+            change[i].setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+            change[i].setVisible(false);
+            contentPanel.add(change[i]);
+        }
+
+        JPanel label_2 = new JPanel();
+        Color c = new Color(255, 255, 255);
+        c = transparentColor(c, 150);
+        label_2.setBackground(c);
+        label_2.setBounds(66, 83, 850, 525);
+        contentPanel.add(label_2);
 
 
     }

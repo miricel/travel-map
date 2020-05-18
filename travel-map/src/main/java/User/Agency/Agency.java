@@ -36,9 +36,10 @@ public class Agency extends User {
         return super.getStringColumn("agencies", column);
     }
 
-    public void showTickets(int travelerID, String s) {
-
+    public boolean isCorrectPassword(String password) throws SQLException {
+        return super.isCorrectPassword("agencies", password);
     }
+
 
     public void createTicket(String title, String comment) throws SQLException {
         /***/

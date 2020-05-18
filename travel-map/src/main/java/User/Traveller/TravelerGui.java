@@ -38,14 +38,6 @@ import javax.swing.UIManager;
 
 public class TravelerGui {
 
-    public static class userButton extends JButton {
-        public int id;
-
-        public userButton(int id) {
-            this.id = id;
-        }
-    }
-
 	private JFrame frame;
 	private Traveler traveler;
 	private int index;
