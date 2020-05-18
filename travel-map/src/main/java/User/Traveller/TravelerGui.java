@@ -187,12 +187,22 @@ public class TravelerGui {
 			}
 		});
 
-		JButton btnNewButton_3 = new JButton("Search users");
+		JButton btnNewButton_3 = new JButton("Search Transport");
 		btnNewButton_3.setContentAreaFilled(false);
 		btnNewButton_3.setBorderPainted(false);;
 		btnNewButton_3.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
 		btnNewButton_3.setForeground(new Color(255, 250, 250));
 		btnNewButton_3.setBounds(2, 54, 137, 27);
+        btnNewButton_3.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                frame.setVisible(false);
+                try {
+                    seeTransportsWindow();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 		panelMenu.add(btnNewButton_3);
 
 		JButton btnNewButton_4 = new JButton("Feed");
@@ -737,6 +747,11 @@ public class TravelerGui {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.getContentPane().setLayout(null);
+
+       /* BackgroundPanel contentPanel= new BackgroundPanel(backgroundimg, 1000, 700);
+        contentPanel.setBounds(0,0, 1000, 700);
+        frame.getContentPane().add(contentPanel);
+        contentPanel.setLayout(null);*/
 
 		myHeader();
 
