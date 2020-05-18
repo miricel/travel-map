@@ -49,6 +49,9 @@ public class TravelerGui {
 	private Connection con;
 	private String path;
 
+	private int startW = 350;
+	private int startH = 150;
+
 
 	public TravelerGui(Connection con, int id) throws SQLException, IOException {
 		this.con = con;
@@ -126,7 +129,7 @@ public class TravelerGui {
 		JButton lblNewLabel_4= new JButton();
 		lblNewLabel_4.setContentAreaFilled(false);
 		lblNewLabel_4.setBorder(null);
-		ImageIcon search = new ImageIcon(this.getClass().getResource("/search.png"));
+		ImageIcon search = new ImageIcon(this.getClass().getResource("/yes.png"));
 		search = resizedImage(15, 15, search);
 		lblNewLabel_4.setIcon(search);
 		lblNewLabel_4.setBounds(487, 0, 25, 27);
@@ -261,7 +264,7 @@ public class TravelerGui {
 	private void homePageWindow() {
 
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1000, 700);
+		frame.setBounds(startW, startH, 1000, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setVisible(true);
@@ -311,7 +314,7 @@ public class TravelerGui {
 	private void settingsWindow() throws SQLException {
 
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1000, 700);
+		frame.setBounds(startW, startH, 1000, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setVisible(true);
@@ -521,7 +524,7 @@ public class TravelerGui {
 
     private void profileWindow() {
         frame = new JFrame();
-        frame.setBounds(100, 100, 1000, 700);
+        frame.setBounds(startW, startH, 1000, 700);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.getContentPane().setLayout(null);
@@ -715,7 +718,7 @@ public class TravelerGui {
 
 	private void feedWindow() throws SQLException, IOException {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1000, 700);
+		frame.setBounds(startW, startH, 1000, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.getContentPane().setLayout(null);
@@ -831,7 +834,7 @@ public class TravelerGui {
 	private void chatWindow() throws SQLException {
 
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 400);
+		frame.setBounds(startW, startH, 450, 400);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setVisible(true);

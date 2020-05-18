@@ -27,6 +27,8 @@ public class GuestGui {
 
 	private JFrame frame;
 	private Guest guest;
+	private int startW = 650;
+	private int startH = 250;
 
 	public GuestGui(Connection con) throws SQLException {		
 		guest = new Guest(con);
@@ -43,9 +45,9 @@ public class GuestGui {
 		return new Color(color.getRed(), color.getGreen(), color.getBlue(), transparencyGradient);
 	}
 	
-	private void logInWindow() {
+	public void logInWindow() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(startW, startH, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setVisible(true);
@@ -197,7 +199,7 @@ public class GuestGui {
 	
 	private void registerUserWindow() {	
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(startW, startH, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setVisible(true);
@@ -349,7 +351,7 @@ public class GuestGui {
 	
 	private void registerAgencyWindow(final int tempID) {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(startW, startH, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setVisible(true);
@@ -473,7 +475,7 @@ public class GuestGui {
 	
 	private void registerTravelerWindow(final int tempID) {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(startW, startH, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setVisible(true);

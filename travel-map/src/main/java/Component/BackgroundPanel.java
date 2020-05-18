@@ -1,6 +1,8 @@
 package Component;
 
 import User.Agency.AgencyGui;
+import User.Guest.Guest;
+import User.Guest.GuestGui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -106,7 +108,7 @@ public class BackgroundPanel extends JPanel {
         });
         panelMenu.add(btnNewButton_1);
 
-        JButton btnNewButton_2 = new JButton("My Agency profile");
+        JButton btnNewButton_2 = new JButton("Add Transport");
         btnNewButton_2.setContentAreaFilled(false);
         btnNewButton_2.setBorderPainted(false);
         btnNewButton_2.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
@@ -117,8 +119,12 @@ public class BackgroundPanel extends JPanel {
             public void actionPerformed(ActionEvent arg0) {
                 agencyGui.getFrame().setVisible(false);
                 try {
-                    agencyGui.profileWindow();
+                    agencyGui.addTransport();
                 } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (FontFormatException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -203,6 +209,16 @@ public class BackgroundPanel extends JPanel {
         btnNewButton_8.setContentAreaFilled(false);
         btnNewButton_8.setBorderPainted(false);
         btnNewButton_8.setBounds(2, 162, 137, 27);
+        btnNewButton_8.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                agencyGui.getFrame().setVisible(false);
+                try {
+                    new GuestGui(agencyGui.getCon()).logInWindow();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         panelMenu.add(btnNewButton_8);
 
 
