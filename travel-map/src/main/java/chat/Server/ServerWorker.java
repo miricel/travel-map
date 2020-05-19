@@ -173,12 +173,20 @@ public class ServerWorker extends Thread {
         if( myRS.next()) {
             this.userid = myRS.getInt("id");
             return true;
-        } else try {
-            throw new SQLException();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null,"Invalid username/password");
-            e.printStackTrace();
+        } else {
+             query = "SELECT id FROM agencies WHERE (username, password) = ('" +username+"','"+password+"')";
+             myRS = mystate.executeQuery(query);
+            if( myRS.next()) {
+                this.userid = myRS.getInt("id");
+                return true;
+            }else  try {
+                throw new SQLException();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null,"Invalid username/password");
+                e.printStackTrace();
+            }
         }
+
         return false;
     }
 

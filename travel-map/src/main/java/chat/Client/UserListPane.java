@@ -2,10 +2,17 @@ package chat.Client;
 import Component.myRow;
 import Component.myRowJPanel;
 import Component.BackgroundList;
+import User.Traveller.Traveler;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -37,7 +44,7 @@ public class UserListPane extends JFrame implements UserStatusListener {
                 client.disconnect();
             }
         });
-        setBounds(50, 50, 414, 450);
+        setBounds(50, 50, 510, 710);
         setTitle("Chat");
         setVisible(true);
         getContentPane().setLayout(new BorderLayout());
@@ -91,17 +98,111 @@ public class UserListPane extends JFrame implements UserStatusListener {
                 String username = rs.getString("username");
                 if( !username.equals(client.getUsername()) ) {
                     JLabel label = new JLabel(username);
-                    label.setPreferredSize(new Dimension(400, 30));
+                    label.setPreferredSize(new Dimension(400, 53));
                     label.setFont(new Font("Liberation Sans", Font.BOLD, 15));
                     label.setForeground(new Color(100, 20, 60));
                     label.setBorder(BorderFactory.createEmptyBorder(3, 10, 3, 5));
                     System.out.println(">>>"+username);
                     JPanel panel = new JPanel();
-                    panel.setPreferredSize(new Dimension(300, 30));
+                    panel.setPreferredSize(new Dimension(300, 53));
                     panel.setBackground(Color.pink);
                     panel.setName(username);
                     panel.setBorder(BorderFactory.createLineBorder(new Color( 200,110,100),2));
                     panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
+
+                    com.mysql.jdbc.Blob blob = (com.mysql.jdbc.Blob) rs.getBlob("profilePic");
+                    InputStream is = blob.getBinaryStream();
+                    BufferedImage b = ImageIO.read(is);
+                    Image image = b;
+                    ImageIcon ic = new ImageIcon(image);
+
+                    BufferedImage bi = new BufferedImage(ic.getIconWidth(), ic.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+                    Graphics g = bi.createGraphics();
+                    ic.paintIcon(null, g, 0,0);
+                    g.dispose();
+
+                    BufferedImage foto = resize(bi,49,49);
+
+                    int diameter = Math.min(foto.getWidth(), foto.getHeight());
+                    BufferedImage mask = new BufferedImage(foto.getWidth(), foto.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+                    Graphics2D g2d = mask.createGraphics();
+                    applyQualityRenderingHints(g2d);
+                    g2d.fillOval(0, 0, diameter - 1, diameter - 1);
+                    g2d.dispose();
+
+                    BufferedImage masked = new BufferedImage(diameter, diameter, BufferedImage.TYPE_INT_ARGB);
+                    g2d = masked.createGraphics();
+                    applyQualityRenderingHints(g2d);
+                    int x = (diameter - foto.getWidth()) / 2;
+                    int y = (diameter - foto.getHeight()) / 2;
+                    g2d.drawImage(foto, x, y, null);
+                    g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_IN));
+                    g2d.drawImage(mask, 0, 0, null);
+                    g2d.dispose();
+
+                    JLabel lblimage = new JLabel(new ImageIcon(masked));
+                    lblimage.setPreferredSize(new Dimension(70,56));
+                    lblimage.setBorder(new EmptyBorder(3,10,3,10));
+                    panel.add(lblimage);
+                    panel.add(label);
+
+                    userListModel.addElement(panel);
+                }
+            }
+
+            rs=st.executeQuery("select * from agencies");
+            while(rs.next())  {
+
+                String username = rs.getString("username");
+                if( !username.equals(client.getUsername()) ) {
+                    JLabel label = new JLabel(username);
+                    label.setPreferredSize(new Dimension(400, 53));
+                    label.setFont(new Font("Liberation Sans", Font.BOLD, 15));
+                    label.setForeground(new Color(100, 20, 60));
+                    label.setBorder(BorderFactory.createEmptyBorder(3, 10, 3, 5));
+                    System.out.println(">>>"+username);
+                    JPanel panel = new JPanel();
+                    panel.setPreferredSize(new Dimension(300, 53));
+                    panel.setBackground(new Color(255, 229, 180));
+                    panel.setName(username);
+                    panel.setBorder(BorderFactory.createLineBorder(new Color( 200,110,100),2));
+                    panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
+                    com.mysql.jdbc.Blob blob = (com.mysql.jdbc.Blob) rs.getBlob("profilePic");
+                    InputStream is = blob.getBinaryStream();
+                    BufferedImage b = ImageIO.read(is);
+                    Image image = b;
+                    ImageIcon ic = new ImageIcon(image);
+
+                    BufferedImage bi = new BufferedImage(ic.getIconWidth(), ic.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+                    Graphics g = bi.createGraphics();
+                    ic.paintIcon(null, g, 0,0);
+                    g.dispose();
+
+                    BufferedImage foto = resize(bi,49,49);
+
+                    int diameter = Math.min(foto.getWidth(), foto.getHeight());
+                    BufferedImage mask = new BufferedImage(foto.getWidth(), foto.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+                    Graphics2D g2d = mask.createGraphics();
+                    applyQualityRenderingHints(g2d);
+                    g2d.fillOval(0, 0, diameter - 1, diameter - 1);
+                    g2d.dispose();
+
+                    BufferedImage masked = new BufferedImage(diameter, diameter, BufferedImage.TYPE_INT_ARGB);
+                    g2d = masked.createGraphics();
+                    applyQualityRenderingHints(g2d);
+                    int x = (diameter - foto.getWidth()) / 2;
+                    int y = (diameter - foto.getHeight()) / 2;
+                    g2d.drawImage(foto, x, y, null);
+                    g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_IN));
+                    g2d.drawImage(mask, 0, 0, null);
+                    g2d.dispose();
+
+                    JLabel lblimage = new JLabel(new ImageIcon(masked));
+                    lblimage.setPreferredSize(new Dimension(70,56));
+                    lblimage.setBorder(new EmptyBorder(3,10,3,10));
+                    panel.add(lblimage);
                     panel.add(label);
 
                     userListModel.addElement(panel);
@@ -133,11 +234,11 @@ public class UserListPane extends JFrame implements UserStatusListener {
         scroll.getViewport().setOpaque(false);
 
         backgroundList = new BackgroundList(scroll);
-        backgroundList.setBounds(0,27,400,450);
+        backgroundList.setBounds(0,27,520,645);
         getContentPane().add(backgroundList);
 
         JPanel myHeader = new JPanel();
-        myHeader.setBounds(0, 0, 400, 246);
+        myHeader.setBounds(0, 0, 500, 246);
         myHeader.setLayout(null);
         myHeader.setOpaque(false);
         getContentPane().add(myHeader);
@@ -145,13 +246,13 @@ public class UserListPane extends JFrame implements UserStatusListener {
         JPanel panelHeader = new JPanel();
         panelHeader.setLayout(null);
         panelHeader.setBackground(new Color(204, 51, 102));
-        panelHeader.setBounds(0, 0, 400, 27);
+        panelHeader.setBounds(0, 0, 512, 27);
         myHeader.add(panelHeader);
 
         JLabel lblMenu = new JLabel("FRIENDS");
         lblMenu.setForeground(new Color(255, 255, 255));
         lblMenu.setFont(new Font("Liberation Sans", Font.BOLD, 13));
-        lblMenu.setBounds(0, 0, 400, 27);
+        lblMenu.setBounds(0, 0, 512, 27);
         lblMenu.setHorizontalAlignment(JTextField.CENTER);
         panelHeader.add(lblMenu);
 
@@ -177,5 +278,28 @@ public class UserListPane extends JFrame implements UserStatusListener {
         lock.lock();
         elements.remove(username);
         lock.unlock();
+    }
+
+    private void applyQualityRenderingHints(Graphics2D g2d) {
+
+        g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+        g2d.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
+        g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+
+    }
+    private static BufferedImage resize(BufferedImage img, int newW, int newH) {
+        Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+        BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2d = dimg.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+
+        return dimg;
     }
 }
