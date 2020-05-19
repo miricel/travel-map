@@ -1023,7 +1023,7 @@ public class AgencyGui {
         contentPanel.myHeader(agency.getStringColumn("username"),this);
 
 
-        AddElement tickets = new AddElement(1,0,1,1,1000,450,35,50);
+        AddElement tickets = new AddElement(1,0,1,1,1000,450,35,50, 110);
         tickets.setOpaque(false);
 
         Statement mystate = null;
@@ -1071,7 +1071,7 @@ public class AgencyGui {
 
         AddElement transports = null;
         try {
-            transports = new AddElement(0,1,1,1,1000,460,90,90);
+            transports = new AddElement(0,1,1,1,1000,460,90,90, 110);
         } catch (SQLException e) {
             e.printStackTrace();
         }

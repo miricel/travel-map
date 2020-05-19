@@ -37,6 +37,13 @@ public class Transport extends Element {
         super.setStringColumn("transport", column, newData);
     }
 
+    public void deleteRow() throws SQLException {
+        super.deleteRow("transport");
+    }
+    public void setIntColumn(String column, int newData) throws SQLException {
+        super.setIntColumn("transport", column, newData);
+    }
+
     public int getIntColumn(String column) throws SQLException {
         return super.getIntColumn("transport", column);
     }

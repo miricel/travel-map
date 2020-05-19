@@ -9,6 +9,15 @@ public class Ticket extends Element{
         super(con, id);
     }
 
+    public static void newTicket(int transport_id, int transport_agencies_id, int travelers_id, String transport_mean)  throws SQLException {
+        String query="INSERT INTO tickets (transport_id, transport_agencies_id, travelers_id, transport_mean) VALUES (?, ?, ?, ?)";
+        com.mysql.jdbc.PreparedStatement preparedStm = (com.mysql.jdbc.PreparedStatement) con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        preparedStm.setInt(1, transport_id);
+        preparedStm.setInt(2, transport_agencies_id);
+        preparedStm.setInt(3, travelers_id);
+        preparedStm.setString(4, transport_mean);
+        preparedStm.executeUpdate();
+    }
 
     public void setStringColumn(String column, String newData) throws SQLException {
         super.setStringColumn("tickets", column, newData);
