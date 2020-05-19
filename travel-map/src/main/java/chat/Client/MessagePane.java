@@ -1,6 +1,7 @@
 package chat.Client;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -61,7 +62,7 @@ public class MessagePane extends JFrame implements MessageListener {
                 dispose();
             }
         });
-        setBounds(50, 50, 414, 450);
+        setBounds(50, 50, 520, 710);
         setVisible(true);
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(inputField, BorderLayout.SOUTH);
@@ -131,33 +132,41 @@ public class MessagePane extends JFrame implements MessageListener {
 
     private JPanel sentMessage(String text) {
 
-        JLabel label = new JLabel(text);
-        label.setPreferredSize(new Dimension(400, 30));
+        JTextPane label = new JTextPane();
+        label.setText(text);
+        label.setPreferredSize(new Dimension(400, 40));
         label.setFont(new Font("Liberation Sans", Font.BOLD, 15));
+        label.setBackground(new Color(100, 20, 60));
+        label.setOpaque(true);
         label.setForeground(Color.pink);
-        label.setBorder(BorderFactory.createEmptyBorder(3, 10, 3, 5));
+        label.setBorder(BorderFactory.createEmptyBorder(1, 3, 1, 5));
         label.setAlignmentX(Component.RIGHT_ALIGNMENT);
         JPanel panel = new JPanel();
-        panel.setPreferredSize(new Dimension(300, 30));
+      //  panel.setPreferredSize(new Dimension(300, 30));
         panel.setBackground(new Color(100, 20, 60));
+        panel.setOpaque(false);
         panel.setName(username);
-        panel.setBorder(BorderFactory.createLineBorder(new Color( 200,110,100),2));
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(new EmptyBorder(1,100,1,10));
+        panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
         panel.add(label);
         return panel;
     }
 
     private JPanel recivedMessage(String text) {
-        JLabel label = new JLabel(text);
-        label.setPreferredSize(new Dimension(400, 30));
+        JTextPane label = new JTextPane();
+        label.setText(text);
+        label.setOpaque(true);
+        label.setPreferredSize(new Dimension(400, 40));
         label.setFont(new Font("Liberation Sans", Font.BOLD, 15));
         label.setForeground(new Color(100, 20, 60));
-        label.setBorder(BorderFactory.createEmptyBorder(3, 10, 3, 5));
+        label.setBackground(Color.pink);
+        label.setBorder(BorderFactory.createEmptyBorder(1, 5, 1, 3));
         JPanel panel = new JPanel();
-        panel.setPreferredSize(new Dimension(300, 30));
-        panel.setBackground(Color.pink);
+        //panel.setPreferredSize(new Dimension(300, 30));
+        //panel.setBackground(Color.pink);
+        panel.setOpaque(false);
         panel.setName(username);
-        panel.setBorder(BorderFactory.createLineBorder(new Color( 200,110,100),2));
+        panel.setBorder(new EmptyBorder(1,5,1,100));
         panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
         panel.add(label);
         return panel;
@@ -168,18 +177,19 @@ public class MessagePane extends JFrame implements MessageListener {
         myRowJPanel row = new myRowJPanel();
         messageList.setCellRenderer(row);
         messageList.setOpaque(false);
-        messageList.ensureIndexIsVisible(listModel.indexOf(listModel.lastElement()));
+        if(!listModel.isEmpty())
+            messageList.ensureIndexIsVisible(listModel.indexOf(listModel.lastElement()));
         JScrollPane scroll = new JScrollPane(messageList);
-        scroll.setBounds(0,27,400,380);
+       // scroll.setBounds(0,27,400,380);
         scroll.setOpaque(false);
         scroll.getViewport().setOpaque(false);
 
         backgroundList = new BackgroundList(scroll);
-        backgroundList.setBounds(0,27,400,368);
+        backgroundList.setBounds(0,27,520,640);
         getContentPane().add(backgroundList);
 
         JPanel myHeader = new JPanel();
-        myHeader.setBounds(0, 0, 400, 246);
+        myHeader.setBounds(0, 0, 510, 246);
         myHeader.setLayout(null);
         myHeader.setOpaque(false);
         getContentPane().add(myHeader);
@@ -187,13 +197,13 @@ public class MessagePane extends JFrame implements MessageListener {
         JPanel panelHeader = new JPanel();
         panelHeader.setLayout(null);
         panelHeader.setBackground(new Color(190, 70, 102));
-        panelHeader.setBounds(0, 0, 400, 27);
+        panelHeader.setBounds(0, 0, 520, 27);
         myHeader.add(panelHeader);
 
         JLabel lblMenu = new JLabel(dest);
         lblMenu.setForeground(new Color(255, 255, 255));
         lblMenu.setFont(new Font("Liberation Sans", Font.BOLD, 13));
-        lblMenu.setBounds(0, 0, 400, 27);
+        lblMenu.setBounds(0, 0, 510, 27);
         lblMenu.setHorizontalAlignment(JTextField.CENTER);
         panelHeader.add(lblMenu);
 

@@ -130,13 +130,14 @@ public class TicketGui extends JPanel {
         price.setPreferredSize(new Dimension(125,20));
 
         //// status??
-        status = new JLabel();
+
         String st = ticket.getStringColumn("status");
-        if(st.equalsIgnoreCase("acepted"))
+        status = new JLabel(st);
+        if(st.equalsIgnoreCase("Accepted"))
             status.setForeground(new Color(73, 168, 25));
         else if(st.equalsIgnoreCase("Rejected"))
             status.setForeground(Color.red);
-        status.setForeground(Color.black);
+        else status.setForeground(Color.black);
         status.setFont(new Font("Liberation Sans", Font.ITALIC, 14));
         setBorder(new EmptyBorder(0,0,0,0));
         status.setPreferredSize(new Dimension(130,20));

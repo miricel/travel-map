@@ -318,6 +318,8 @@ public class BackgroundPanel extends JPanel {
                     agencyGui.homePageWindow();
                 } catch (SQLException e) {
                     e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -411,7 +413,7 @@ public class BackgroundPanel extends JPanel {
                 agencyGui.getFrame().setVisible(false);
                 try {
                     agencyGui.chatWindow();
-                } catch (SQLException e) {
+                } catch (SQLException | IOException e) {
                     e.printStackTrace();
                 }
             }

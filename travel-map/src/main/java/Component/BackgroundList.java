@@ -17,13 +17,14 @@ public class BackgroundList extends JPanel {
     public BackgroundList(JScrollPane scrollPane) {
         setLayout(new BorderLayout());
         try {
-            background = ImageIO.read(new File("resources/mini-pink.jpg"));
+            background = ImageIO.read(new File("resources/pink.jpg"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
 
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
+        setOpaque(false);
 
         add(scrollPane);
 
