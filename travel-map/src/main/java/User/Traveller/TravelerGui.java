@@ -81,214 +81,9 @@ public class TravelerGui {
 		ImageIcon imageIcon = new ImageIcon(modified);
 		return imageIcon;
 	}
-	
 
 	private Color transparentColor(Color color, int transparencyGradient) {
 		return new Color(color.getRed(), color.getGreen(), color.getBlue(), transparencyGradient);
-	}
-
-	private void myHeader() {
-
-		index = 0;
-		Color color = new Color(0, 0, 0);
-		color = transparentColor(color, 200);
-
-		JPanel myHeader = new JPanel();
-		myHeader.setBounds(0, 0, 1000, 261);
-		myHeader.setLayout(null);
-		myHeader.setOpaque(false);
-		frame.getContentPane().add(myHeader);
-
-		JPanel panelHeader = new JPanel();
-		panelHeader.setLayout(null);
-		panelHeader.setBackground(new Color(204, 51, 102));
-		panelHeader.setBounds(0, 0, 1000, 27);
-		myHeader.add(panelHeader);
-
-		JLabel lblMenu = new JLabel("MENU");
-		lblMenu.setForeground(new Color(255, 255, 255));
-		lblMenu.setFont(new Font("Liberation Sans", Font.BOLD, 13));
-		lblMenu.setBounds(38, 0, 51, 27);
-		panelHeader.add(lblMenu);
-
-		JButton btnMenu =new JButton("||||");
-		btnMenu.setBorderPainted(false);
-		btnMenu.setBounds(-13, -2, 63, 27);
-		panelHeader.add(btnMenu);
-		btnMenu.setContentAreaFilled(false);
-		btnMenu.setForeground(new Color(255, 255, 255));
-		btnMenu.setFont(new Font("Jamrul", Font.BOLD, 14));
-
-		JLabel lblUser = new JLabel();
-		try {
-			String s = traveler.getStringColumn("username");
-			s = s + "@traveler";
-			lblUser.setText(s);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		lblUser.setForeground(UIManager.getColor("EditorPane.foreground"));
-		lblUser.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
-		lblUser.setBounds(827, 6, 142, 15);
-		panelHeader.add(lblUser);
-
-		JTextPane txtpnSearchUser = new JTextPane();
-		txtpnSearchUser.setForeground(Color.BLACK);
-		txtpnSearchUser.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
-		txtpnSearchUser.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		txtpnSearchUser.setBackground(new Color(214, 61, 112));
-		txtpnSearchUser.setBounds(284, 6, 191, 17);
-		panelHeader.add(txtpnSearchUser);
-
-		JButton lblNewLabel_4= new JButton();
-		lblNewLabel_4.setContentAreaFilled(false);
-		lblNewLabel_4.setBorder(null);
-		ImageIcon search = new ImageIcon(this.getClass().getResource("/search.png"));
-		search = resizedImage(15, 15, search);
-		lblNewLabel_4.setIcon(search);
-		lblNewLabel_4.setBounds(487, 0, 25, 27);
-		panelHeader.add(lblNewLabel_4);
-
-
-		JPanel panelMenu = new JPanel();
-		panelMenu.setLayout(null);
-		panelMenu.setBorder(null);
-		panelMenu.setVisible(false);
-		panelMenu.setBackground(color);
-		panelMenu.setBounds(0, 27, 139, 219);
-		myHeader.add(panelMenu);
-
-		JButton btnNewButton_1 = new JButton("Home");
-		btnNewButton_1.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
-		btnNewButton_1.setForeground(new Color(255, 255, 255));
-		btnNewButton_1.setContentAreaFilled(false);
-		btnNewButton_1.setBorderPainted(false);
-		btnNewButton_1.setBounds(2, 0, 137, 27);
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				frame.setVisible(false);
-				homePageWindow();
-			}
-		});
-		panelMenu.add(btnNewButton_1);
-
-		JButton btnNewButton_2 = new JButton("My profile");
-		btnNewButton_2.setContentAreaFilled(false);
-		btnNewButton_2.setBorderPainted(false);;
-		btnNewButton_2.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
-		btnNewButton_2.setForeground(new Color(255, 255, 255));
-		btnNewButton_2.setBounds(2, 27, 137, 27);
-		panelMenu.add(btnNewButton_2);
-		btnNewButton_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				frame.setVisible(false);
-				profileWindow();
-			}
-		});
-
-		JButton btnNewButton_3 = new JButton("Search Transport");
-		btnNewButton_3.setContentAreaFilled(false);
-		btnNewButton_3.setBorderPainted(false);;
-		btnNewButton_3.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
-		btnNewButton_3.setForeground(new Color(255, 250, 250));
-		btnNewButton_3.setBounds(2, 54, 137, 27);
-        btnNewButton_3.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                frame.setVisible(false);
-                try {
-                    seeTransportsWindow();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-		panelMenu.add(btnNewButton_3);
-
-		JButton btnNewButton_4 = new JButton("Feed");
-		btnNewButton_4.setContentAreaFilled(false);
-		btnNewButton_4.setBorderPainted(false);;
-		btnNewButton_4.setForeground(new Color(255, 255, 255));
-		btnNewButton_4.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
-		btnNewButton_4.setBounds(2, 81, 137, 27);
-		panelMenu.add(btnNewButton_4);
-		btnNewButton_4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				frame.setVisible(false);
-				try {
-					feedWindow();
-				} catch (SQLException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-		});
-
-		JButton btnNewButton_5 = new JButton("My tickets");
-		btnNewButton_5.setContentAreaFilled(false);
-		btnNewButton_5.setBorderPainted(false);;
-		btnNewButton_5.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
-		btnNewButton_5.setForeground(new Color(255, 255, 255));
-		btnNewButton_5.setBounds(2, 108, 137, 27);
-		panelMenu.add(btnNewButton_5);
-		btnNewButton_5.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				frame.setVisible(false);
-                try {
-                    ticketsWindow();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-		});
-
-		JButton btnNewButton_6 = new JButton("Settings");
-		btnNewButton_6.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
-		btnNewButton_6.setForeground(new Color(255, 255, 255));
-		btnNewButton_6.setContentAreaFilled(false);
-		btnNewButton_6.setBorderPainted(false);
-		btnNewButton_6.setBounds(2, 135, 137, 27);
-		btnNewButton_6.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				frame.setVisible(false);
-				try {
-					settingsWindow();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		});
-		panelMenu.add(btnNewButton_6);
-
-		JButton btnNewButton_7 = new JButton("Log out");
-		btnNewButton_7.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
-		btnNewButton_7.setForeground(new Color(255, 255, 255));
-		btnNewButton_7.setContentAreaFilled(false);
-		btnNewButton_7.setBorderPainted(false);
-		btnNewButton_7.setBounds(2, 162, 137, 27);
-		btnNewButton_7.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				frame.setVisible(false);
-				try {
-					GuestGui guest = new GuestGui(traveler.con);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		panelMenu.add(btnNewButton_7);
-
-		btnMenu.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				index++;
-				if(index%2 == 0)
-					panelMenu.setVisible(false);
-				else panelMenu.setVisible(true);
-			}
-		});
-
 	}
 
 	public void homePageWindow() {
@@ -312,8 +107,9 @@ public class TravelerGui {
 
         JPanel panelContent = new JPanel();
 		panelContent.setLayout(null);
+		panelContent.setOpaque(false);
 		panelContent.setBounds(1, 12, 987, 658);
-		frame.getContentPane().add(panelContent);
+		contentPanel.add(panelContent);
 
 		JLabel lblImage = new JLabel();
 		lblImage.setBorder(null);
@@ -352,13 +148,22 @@ public class TravelerGui {
 
     public void settingsWindow() throws SQLException {
 
-		frame = new JFrame();
-		frame.setBounds(startW, startH, 1000, 700);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-		frame.setVisible(true);
+        frame = new JFrame();
+        frame.setBounds(startW, startH, 1000, 700);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setLayout(null);
+        frame.setVisible(true);
 
-		myHeader();
+        BackgroundPanel contentPanel= new BackgroundPanel(backgroundimg, 1000, 700);
+        contentPanel.setBounds(0,0, 1000, 700);
+        frame.getContentPane().add(contentPanel);
+        contentPanel.setLayout(null);
+
+        try {
+            contentPanel.myHeader(traveler.getStringColumn("username"),this);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         JTextPane []change = new JTextPane[5];
 
@@ -379,7 +184,7 @@ public class TravelerGui {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-        frame.getContentPane().add(label);
+        contentPanel.add(label);
 
         JButton btnUploadPic = new JButton("Upload profile pic");
         btnUploadPic.setForeground(new Color(255, 255, 255));
@@ -405,57 +210,57 @@ public class TravelerGui {
             }
         });
         btnUploadPic.setBounds(45, 265, 150, 35);
-        frame.getContentPane().add(btnUploadPic);
+        contentPanel.add(btnUploadPic);
 
         JLabel lblNewLabel = new JLabel("Userame");
         lblNewLabel.setFont(new Font("Liberation Sans", Font.BOLD, 16));
         lblNewLabel.setBounds(322, 95, 393, 15);
-        frame.getContentPane().add(lblNewLabel);
+        contentPanel.add(lblNewLabel);
 
         JLabel lblMyname = new JLabel(traveler.getStringColumn("username"));
         lblMyname.setFont(new Font("Liberation Sans", Font.PLAIN, 15));
         lblMyname.setBounds(322, 130, 170, 15);
-        frame.getContentPane().add(lblMyname);
+        contentPanel.add(lblMyname);
 
         JLabel lblNewLabel_1 = new JLabel("Password");
         lblNewLabel_1.setFont(new Font("Liberation Sans", Font.BOLD, 16));
         lblNewLabel_1.setBounds(322, 195, 170, 15);
-        frame.getContentPane().add(lblNewLabel_1);
+        contentPanel.add(lblNewLabel_1);
 
         JLabel lblMysurname = new JLabel("********");
         lblMysurname.setFont(new Font("Liberation Sans", Font.PLAIN, 15));
         lblMysurname.setBounds(322, 230, 170, 15);
-        frame.getContentPane().add(lblMysurname);
+        contentPanel.add(lblMysurname);
 
         JLabel lblUsername = new JLabel("Name");
         lblUsername.setFont(new Font("Liberation Sans", Font.BOLD, 16));
         lblUsername.setBounds(322, 295, 170, 15);
-        frame.getContentPane().add(lblUsername);
+        contentPanel.add(lblUsername);
 
         JLabel lblNewLabel_2 = new JLabel(traveler.getStringColumn("name"));
         lblNewLabel_2.setFont(new Font("Liberation Sans", Font.PLAIN, 15));
         lblNewLabel_2.setBounds(322, 330, 170, 15);
-        frame.getContentPane().add(lblNewLabel_2);
+        contentPanel.add(lblNewLabel_2);
 
         JLabel lblPassword = new JLabel("Surname");
         lblPassword.setFont(new Font("Liberation Sans", Font.BOLD, 16));
         lblPassword.setBounds(322, 395, 170, 15);
-        frame.getContentPane().add(lblPassword);
+        contentPanel.add(lblPassword);
 
         JLabel label_1 = new JLabel(traveler.getStringColumn("surname"));
         label_1.setFont(new Font("Liberation Sans", Font.PLAIN, 15));
         label_1.setBounds(322, 430, 170, 15);
-        frame.getContentPane().add(label_1);
+        contentPanel.add(label_1);
 
         JLabel lblNewLabel_3 = new JLabel("Default departure city");
         lblNewLabel_3.setFont(new Font("Liberation Sans", Font.BOLD, 16));
         lblNewLabel_3.setBounds(322, 495, 170, 15);
-        frame.getContentPane().add(lblNewLabel_3);
+        contentPanel.add(lblNewLabel_3);
 
         JLabel lblMycity = new JLabel(traveler.getStringColumn("departureCity"));
         lblMycity.setFont(new Font("Liberation Sans", Font.PLAIN, 15));
         lblMycity.setBounds(322, 530, 170, 15);
-        frame.getContentPane().add(lblMycity);
+        contentPanel.add(lblMycity);
 
         JButton []btn = new JButton[5];
         int []isPressed = new int[5];
@@ -478,7 +283,7 @@ public class TravelerGui {
                     isPressed[i]++;
                 }
             });
-            frame.getContentPane().add(btn[i]);
+            contentPanel.add(btn[i]);
         }
         btn[0].setName("username");
         btn[1].setName("password");
@@ -488,13 +293,13 @@ public class TravelerGui {
 
         JPasswordField textField = new JPasswordField();
         textField.setBounds(231, 617, 188, 25);
-        frame.getContentPane().add(textField);
+        contentPanel.add(textField);
         textField.setColumns(10);
 
         JLabel lblIntroduceCurrentPasssword = new JLabel("Current passsword");
         lblIntroduceCurrentPasssword.setFont(new Font("Liberation Sans", Font.BOLD, 15));
         lblIntroduceCurrentPasssword.setBounds(233, 584, 150, 15);
-        frame.getContentPane().add(lblIntroduceCurrentPasssword);
+        contentPanel.add(lblIntroduceCurrentPasssword);
 
         JButton btnNewButton = new JButton("Save Changes");
         btnNewButton.addActionListener(new ActionListener() {
@@ -534,14 +339,14 @@ public class TravelerGui {
         btnNewButton.setForeground(new Color(255, 255, 255));
         btnNewButton.setFont(new Font("Liberation Sans", Font.BOLD, 15));
         btnNewButton.setBounds(577, 607, 159, 35);
-        frame.getContentPane().add(btnNewButton);
+        contentPanel.add(btnNewButton);
 
         for(int i = 0; i < 5; i++) {
             change[i]= new JTextPane();
             change[i].setBounds(322, 125+i*100, 170, 20);
             change[i].setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
             change[i].setVisible(false);
-            frame.getContentPane().add(change[i]);
+            contentPanel.add(change[i]);
         }
 
         JPanel label_2 = new JPanel();
@@ -549,26 +354,27 @@ public class TravelerGui {
         c = transparentColor(c, 150);
         label_2.setBackground(c);
         label_2.setBounds(281, 83, 619, 475);
-        frame.getContentPane().add(label_2);
-
-        JLabel background = new JLabel();
-        background.setBounds(0, 0, 1000, 706);
-        background.setBorder(null);
-        frame.getContentPane().add(background);
-        ImageIcon scaled = new ImageIcon(this.getClass().getResource("/transports2.jpg"));
-        scaled = resizedImage(background.getWidth(), background.getHeight(), scaled);
-        background.setIcon(scaled);
-
+        contentPanel.add(label_2);
 	}
 
     public void profileWindow() {
+
         frame = new JFrame();
         frame.setBounds(startW, startH, 1000, 700);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
         frame.getContentPane().setLayout(null);
+        frame.setVisible(true);
 
-        myHeader();
+        BackgroundPanel contentPanel= new BackgroundPanel(backgroundimg, 1000, 700);
+        contentPanel.setBounds(0,0, 1000, 700);
+        frame.getContentPane().add(contentPanel);
+        contentPanel.setLayout(null);
+
+        try {
+            contentPanel.myHeader(traveler.getStringColumn("username"),this);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         try {
             ImageIcon pic = traveler.getProfilePicture();
@@ -577,7 +383,7 @@ public class TravelerGui {
             lblProfilePic.setBorder(new LineBorder(new Color(0, 0, 0), 2));
             ImageIcon scaled = resizedImage(lblProfilePic.getWidth(), lblProfilePic.getHeight(), pic);
             lblProfilePic.setIcon(scaled);
-            frame.getContentPane().add(lblProfilePic);
+            contentPanel.add(lblProfilePic);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -595,14 +401,14 @@ public class TravelerGui {
             lblNameSurname.setFont(new Font("Dialog", Font.BOLD, 18));
             lblNameSurname.setHorizontalAlignment(SwingConstants.CENTER);
             lblNameSurname.setBounds(337, 273, 303, 15);
-            frame.getContentPane().add(lblNameSurname);
+            contentPanel.add(lblNameSurname);
 
             JPanel panel = new JPanel();
             panel.setLayout(null);
             panel.setBorder(new LineBorder(new Color(169, 169, 169)));
             panel.setBackground(Color.DARK_GRAY);
             panel.setBounds(224, 321, 170, 86);
-            frame.getContentPane().add(panel);
+            contentPanel.add(panel);
 
             JButton btnNewButton_11 = new JButton();
             btnNewButton_11.addActionListener(new ActionListener() {
@@ -630,7 +436,7 @@ public class TravelerGui {
             panel_1.setBorder(new LineBorder(new Color(169, 169, 169)));
             panel_1.setBackground(Color.DARK_GRAY);
             panel_1.setBounds(419, 321, 170, 86);
-            frame.getContentPane().add(panel_1);
+            contentPanel.add(panel_1);
 
             JButton btnNewButton_10 = new JButton();
             btnNewButton_10.addActionListener(new ActionListener() {
@@ -657,7 +463,7 @@ public class TravelerGui {
             panel_2.setBorder(new LineBorder(new Color(169, 169, 169)));
             panel_2.setBackground(Color.DARK_GRAY);
             panel_2.setBounds(614, 321, 170, 86);
-            frame.getContentPane().add(panel_2);
+            contentPanel.add(panel_2);
 
             JButton btnNewButton_12 = new JButton();
             btnNewButton_12.addActionListener(new ActionListener() {
@@ -691,14 +497,14 @@ public class TravelerGui {
             editorPane.setForeground(SystemColor.inactiveCaption);
             editorPane.setBounds(79, 516, 465, 122);
             editorPane.setText("Your review..");
-            frame.getContentPane().add(editorPane);
+            contentPanel.add(editorPane);
 
             JTextPane txtpnTitle = new JTextPane();
             txtpnTitle.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
             txtpnTitle.setText("Title");
             txtpnTitle.setForeground(SystemColor.inactiveCaption);
             txtpnTitle.setBounds(79, 471, 286, 37);
-            frame.getContentPane().add(txtpnTitle);
+            contentPanel.add(txtpnTitle);
 
             JButton btnNewButton_13 = new JButton();
             btnNewButton_13.setBackground(new Color(0, 0, 102));
@@ -714,7 +520,7 @@ public class TravelerGui {
             ImageIcon photo = new ImageIcon(this.getClass().getResource("/photo.png"));
             photo = resizedImage(30, 30, photo);
             btnNewButton_13.setIcon(photo);
-            frame.getContentPane().add(btnNewButton_13);
+            contentPanel.add(btnNewButton_13);
 
             JButton btnNewButton_14 = new JButton("Post");
             btnNewButton_14.addActionListener(new ActionListener() {
@@ -732,26 +538,18 @@ public class TravelerGui {
             btnNewButton_14.setForeground(SystemColor.text);
             btnNewButton_14.setFont(new Font("Liberation Sans", Font.BOLD, 15));
             btnNewButton_14.setBounds(454, 471, 90, 37);
-            frame.getContentPane().add(btnNewButton_14);
+            contentPanel.add(btnNewButton_14);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         JLabel lblCover = new JLabel("");
         lblCover.setBounds(0, 24, 1000, 700);
-        frame.getContentPane().add(lblCover);
+        contentPanel.add(lblCover);
 
         ImageIcon cover = new ImageIcon(this.getClass().getResource("/fade.png"));
         cover = resizedImage(lblCover.getWidth(), lblCover.getHeight(), cover);
         lblCover.setIcon(cover);
-
-        JLabel background = new JLabel();
-        background.setBounds(0, 0, 1000, 706);
-        background.setBorder(null);
-        frame.getContentPane().add(background);
-        ImageIcon scaled = new ImageIcon(this.getClass().getResource("/transports2.jpg"));
-        scaled = resizedImage(background.getWidth(), background.getHeight(), scaled);
-        background.setIcon(scaled);
 
     }
 
@@ -858,8 +656,6 @@ public class TravelerGui {
 
         contentPanel.myHeader(traveler.getStringColumn("username"),this);
 
-       // myHeader();
-
         AddElement transports = null;
         try {
             transports = new AddElement(0,1,1,1,1000,460,90,90, 110);
@@ -894,13 +690,19 @@ public class TravelerGui {
 
 	private void chatWindow() throws SQLException {
 
-		frame = new JFrame();
-		frame.setBounds(startW, startH, 450, 400);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-		frame.setVisible(true);
+        frame = new JFrame();
+        frame.setBounds(100, 100, 1000, 700);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // frame.getContentPane().setLayout(new BorderLayout());
+        frame.getContentPane().setLayout(null);
+        frame.setVisible(true);
 
-		myHeader();
+        BackgroundPanel contentPanel = new BackgroundPanel(backgroundimg, 1000, 700);
+        contentPanel.setBounds(0,0, 1000, 700);
+        frame.getContentPane().add(contentPanel);
+        contentPanel.setLayout(null);
+
+        contentPanel.myHeader(traveler.getStringColumn("username"),this);
 		final String username = traveler.getStringColumn("travelers", "username");
 		final String password = traveler.getStringColumn("travelers", "password");
 
@@ -909,7 +711,7 @@ public class TravelerGui {
 		Message.setBackground(SystemColor.desktop);
 		Message.setForeground(Color.WHITE);
 		Message.setBounds(149, 40, 138, 25);
-		frame.getContentPane().add(Message);
+		contentPanel.add(Message);
 		Message.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new ConnectChatWindow(username, password, con);
@@ -928,7 +730,7 @@ public class TravelerGui {
 		someoneElse.setForeground(new Color(255, 255, 255));
 		someoneElse.setFont(new Font("Liberation Sans", Font.BOLD, 13));
 		someoneElse.setBounds(149, 122, 138, 25);
-		frame.getContentPane().add(someoneElse);
+		contentPanel.add(someoneElse);
 	}
 	
 }
