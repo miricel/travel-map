@@ -98,23 +98,6 @@ public class BackgroundPanel extends JPanel {
         lblUser.setBounds(827, 6, 142, 15);
         panelHeader.add(lblUser);
 
-        JTextPane txtpnSearchUser = new JTextPane();
-        txtpnSearchUser.setForeground(Color.BLACK);
-        txtpnSearchUser.setFont(new Font("Liberation Sans", Font.PLAIN, 12));
-        txtpnSearchUser.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-        txtpnSearchUser.setBackground(new Color(214, 61, 112));
-        txtpnSearchUser.setBounds(284, 6, 191, 17);
-        panelHeader.add(txtpnSearchUser);
-
-        JButton lblNewLabel_4= new JButton();
-        lblNewLabel_4.setContentAreaFilled(false);
-        lblNewLabel_4.setBorder(null);
-        ImageIcon search = new ImageIcon(this.getClass().getResource("/search.png"));
-        search = resizedImage(15, 15, search);
-        lblNewLabel_4.setIcon(search);
-        lblNewLabel_4.setBounds(487, 0, 25, 27);
-        panelHeader.add(lblNewLabel_4);
-
         JPanel panelMenu = new JPanel();
         panelMenu.setLayout(null);
         panelMenu.setBorder(null);

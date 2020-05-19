@@ -21,6 +21,7 @@ public class TransportTravelerGui extends JPanel {
     private final Connection con;
     private final int transportId, travelerId;
     private Transport transport;
+    private int taken;
     private JPanel type;
     private JPanel departure;
     private JPanel arrival;
@@ -53,7 +54,6 @@ public class TransportTravelerGui extends JPanel {
         } catch (FontFormatException e) {
             e.printStackTrace();
         }
-
         add(type);
         add(departure);
         add(arrival);
@@ -78,7 +78,7 @@ public class TransportTravelerGui extends JPanel {
         pricelbl.setAlignmentX(CENTER_ALIGNMENT);
         text.add(pricelbl);
         int all = transportData.getInt("max_tickets");
-        int taken = transportData.getInt("taken_tickets");
+        taken = transportData.getInt("taken_tickets");
         JLabel placelbl = new JLabel((all-taken)+"/"+all+" left");
         placelbl.setFont(font);
         placelbl.setForeground(Color.black);
@@ -99,8 +99,11 @@ public class TransportTravelerGui extends JPanel {
         circle.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if((all-1) > 0)
-                        transport.setIntColumn("max_tickets", all-1);
+                    if((taken+1) < all) {
+                        transport.setIntColumn("taken_tickets", taken + 1);
+                        taken++;
+                        placelbl.setText((all-taken)+"/"+all+" left");
+                    }
                     else transport.deleteRow();
                     Ticket.newTicket(transportId, transport.getIntColumn("agencies_id"), travelerId,transport.getStringColumn("type"));
                     JOptionPane.showMessageDialog(null, "Ticket booked!");
