@@ -569,7 +569,7 @@ public class TravelerGui {
         contentPanel.myHeader(traveler.getStringColumn("username"),this);
 
 
-        AddElement tickets = new AddElement(1,0,1,1,1000,450,35,50, 110);
+        AddElement tickets = new AddElement(1,0,1,1,1000,290,35,50, 190);
         tickets.setOpaque(false);
 
         Statement mystate = null;
@@ -579,7 +579,7 @@ public class TravelerGui {
             String query = "SELECT * FROM tickets where travelers_id = "+ traveler.id;
             ResultSet myRS = mystate.executeQuery(query);
             while (myRS.next()) {
-                TicketGui ticketGui = new TicketGui(con, myRS.getInt("id"));
+                TicketTravelerGui ticketGui = new TicketTravelerGui(con, myRS.getInt("id"));
                 tickets.addNew(ticketGui);
             }
 
