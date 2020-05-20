@@ -105,6 +105,7 @@ public class Client {
         preparedStm.execute();
         preparedStm.close();
 
+
         output.println(cmd);
     }
 
@@ -242,5 +243,10 @@ public class Client {
 
     public String getUsername() {
         return username;
+    }
+
+    public void msgSimple(String jim, String s) {
+        String cmd = "msg "+ jim + " " + s;
+        output.println(cmd);
     }
 }

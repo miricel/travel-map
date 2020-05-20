@@ -57,7 +57,7 @@ public class Transport extends Element {
         return new Timestamp(temp.getTime()).toLocalDateTime();
     }
 
-    protected ResultSet getAllData() throws SQLException{
+    public ResultSet getAllData() throws SQLException{
         return super.getAllData("transport");
     }
 
